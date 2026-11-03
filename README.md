@@ -2,7 +2,7 @@
 
 **RedMuse - Autonomous pentesting, built for Muse.ai.**
 
-![RedMuse banner](assets/banner.webp)
+![RedMuse banner](assets/banner-original.webp)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Engine: Muse.ai](https://img.shields.io/badge/Engine-Muse.ai-blue.svg)](https://muse.ai)
