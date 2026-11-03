@@ -3,12 +3,13 @@ name: Auto tag
 on:
   push:
     branches: [main]
-    # Tag on any change except workflows, README, and LICENSE.
+    # Tag on any change except workflows, README, LICENSE, and assets.
     paths-ignore:
       - ".github/workflows/**"
       - "README.md"
       - "**/README.md"
       - "LICENSE"
+      - "assets/**"
 
 permissions:
   contents: write
@@ -34,7 +35,7 @@ jobs:
           fi
           if [ -z "$files" ]; then
             changed=false
-          elif printf '%s\n' "$files" | grep -q -v -E '^(\.github/workflows/.*|(.*/)?README\.md|LICENSE)$'; then
+          elif printf '%s\n' "$files" | grep -q -v -E '^(\.github/workflows/.*|(.*/)?README\.md|LICENSE|assets/.*)$'; then
             changed=true
           else
             changed=false
