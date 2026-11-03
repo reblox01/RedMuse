@@ -37,6 +37,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          if gh release view "${{ github.ref_name }}" >/dev/null 2>&1; then
+            echo "release ${{ github.ref_name }} already exists, skipping"
+            exit 0
+          fi
           gh release create "${{ github.ref_name }}" \
             --title "RedMuse ${{ github.ref_name }}" \
             --notes "Skill pack release. Install by asking Muse to install RedMuse ${{ github.ref_name }} from https://github.com/reblox01/RedMuse, or download the zip below and install it with scripts/install.sh. Test targets are not in the zip; they stay in the repo for demos only. Push a new tag for each release." \

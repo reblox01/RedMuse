@@ -72,3 +72,35 @@ jobs:
           new="${{ steps.version.outputs.new }}"
           git tag "$new" || echo "tag $new already exists"
           git push origin "$new" || echo "tag $new already pushed, skipping"
+      - name: Create release for new tag
+        if: steps.version.outputs.tagged == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          new="${{ steps.version.outputs.new }}"
+          if gh release view "$new" >/dev/null 2>&1; then
+            echo "release $new already exists, skipping"
+            exit 0
+          fi
+          python3 - <<'EOF'
+          import zipfile
+          from pathlib import Path
+          tag = "${{ steps.version.outputs.new }}"
+          out = f"redmuse-{tag}.zip"
+          include = ["skills", "docs", "templates", "tools", "scripts",
+                     "examples", "README.md", "LICENSE", "CONTRIBUTING.md"]
+          with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as zf:
+              for item in include:
+                  p = Path(item)
+                  if p.is_file():
+                      zf.write(p, p.name)
+                  elif p.is_dir():
+                      for f in sorted(p.rglob("*")):
+                          if f.is_file():
+                              zf.write(f, f)
+          print(f"built {out}")
+          EOF
+          gh release create "$new" \
+            --title "RedMuse $new" \
+            --notes "Skill pack release. Install by asking Muse to install RedMuse $new from https://github.com/reblox01/RedMuse, or download the zip below and install it with scripts/install.sh. Test targets are not in the zip; they stay in the repo for demos only." \
+            redmuse-*.zip

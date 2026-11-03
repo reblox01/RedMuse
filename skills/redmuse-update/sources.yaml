@@ -22,6 +22,7 @@ sources:
     covers:
       - redmuse-orchestrator
       - redmuse-recon
+      - redmuse-cve-intel
       - redmuse-web
       - redmuse-api
       - redmuse-auth

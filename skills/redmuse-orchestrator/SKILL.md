@@ -33,12 +33,25 @@ mid-run, and nothing pushes automatically. A run that skipped the
 check, or proceeded under a staleness warning, says so in its
 report.
 
+## Phase 1.5: CVE intel
+
+After recon, before any exploit team starts, run redmuse-cve-intel.
+Recon hands it a fingerprint list, it queries live CVE data, and it
+returns a shortlist plus a probe plan. Exploit teams take that plan
+as their probe list for known vulnerabilities: patched records get
+no probe, unknown-version records get no exploit attempt, and
+remote code execution records get version evidence only on live
+targets. A run that skipped CVE intel, or whose CVE check did not
+complete, says so in its report.
+
 ## Teams
 
 Fan out to specialist subagents, one team per phase. Never do every phase
 yourself in one long pass.
 
 - Recon: redmuse-recon. Read-only. Runs first, always.
+- CVE intel: redmuse-cve-intel. Live CVE lookup from fingerprints.
+  Runs second, before any exploit team.
 - Web: redmuse-web. Black-box OWASP Top 10.
 - API: redmuse-api. OWASP API Security Top 10.
 - Code: redmuse-code. White-box, only when source is in scope.
@@ -67,6 +80,10 @@ Every candidate finding comes back in this shape, no exceptions:
 - title, severity guess, endpoint, method, parameter.
 - proof: the exact request and response that reproduce it, with a
   harmless marker.
+- cve: vulnerability id when the finding came from a CVE intel
+  record, else blank.
+- fixed version: the patched version from the CVE record, else blank.
+- exploit selected: the safe check run for the CVE record, else blank.
 - impact: what an attacker actually gains, in one paragraph.
 - fix: the root cause fix, not a symptom patch.
 

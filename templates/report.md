@@ -23,6 +23,19 @@ Ranked critical, high, medium, low, info. One section per finding:
 - Title, severity, endpoint, parameter, CWE.
 - Impact and proof summary.
 - Fix.
+- CVE fields when the finding came from a CVE intel record: vuln id,
+  fixed version, cve status, exploit selected.
+
+## CVE intel
+
+- Shortlist table: vuln id, applicability, fixed version, class,
+  probe selected or reason for none.
+- Checked: fingerprints queried, with version and source per item.
+- Skipped: patched records, unknown-version records, and
+  unconfirmed candidates, each with its reason.
+- Source status: OSV and NVD ok, skipped, or error, and whether
+  the CVE check completed. An incomplete check is stated, never
+  hidden behind "no known vulnerabilities".
 
 ## Unvalidated
 

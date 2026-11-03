@@ -44,14 +44,20 @@ orchestrator reproduces the proof of concept or marks it unvalidated.
    recorded in run-log.md before anything active runs.
 2. Recon: build the attack surface inventory. Passive first, then light
    active enumeration inside the agreed scope.
-3. Exploit: each team works its class list with non-destructive payloads.
-   Every attempt is logged with request, response, and result.
-4. Validate: reproduce each candidate finding with a minimal proof of
+3. CVE intel: from recon fingerprints, query live CVE data and build
+   a shortlist plus a probe plan, before any exploit team starts.
+   Patched records get no probe, unknown-version records get no
+   exploit attempt, remote code execution records get version
+   evidence only on live targets.
+4. Exploit: each team works its class list plus its CVE plan items
+   with non-destructive payloads. Every attempt is logged with
+   request, response, and result.
+5. Validate: reproduce each candidate finding with a minimal proof of
    concept. No reproduction means unvalidated, and unvalidated findings
    never get a confirmed severity.
-5. Report: rank by severity and reachability, dedupe by root cause, write
+6. Report: rank by severity and reachability, dedupe by root cause, write
    report.md, findings.json, and one file per finding.
-6. Retest: after fixes, re-run only the proofs for fixed findings and
+7. Retest: after fixes, re-run only the proofs for fixed findings and
    record the outcome per finding.
 
 ## Budgets
@@ -148,7 +154,10 @@ silently shrinks coverage.
 findings.json is a flat object with run metadata plus a findings array.
 Fields per finding: id, title, severity, status, endpoint, method,
 parameter, cwe (or null), proof (one paragraph plus request summary),
-fix, and affected_endpoints (array, possibly empty). Severities are
+fix, and affected_endpoints (array, possibly empty). Findings from a
+CVE intel record also carry cve (vuln id or null), fixed_version,
+cve_status (applicable, not-applicable, unvalidated, or
+check-incomplete), and exploit_selected. Severities are
 critical, high, medium, low, info. Statuses are open, fixed, still
 open, changed, or unvalidated. A future version adds a SARIF export
 built from this schema.

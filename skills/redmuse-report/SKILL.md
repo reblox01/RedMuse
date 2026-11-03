@@ -32,10 +32,14 @@ Write all of these under redmuse-runs/<run-name>/:
 
 - report.md: executive summary, scope and coverage statement, ranked
   findings with impact and fix per finding, unvalidated section, and
-  probed-but-clean classes.
+  probed-but-clean classes, plus a CVE intel section: shortlist
+  table, what was checked, what was skipped and why, and source
+  status.
 - findings.json: machine-readable findings following templates/report.md
   shape: id, title, severity, status, endpoint, method, parameter,
-  CWE when known, proof summary, fix.
+  CWE when known, proof summary, fix, plus cve id, fixed version,
+  cve status, and exploit selected when the finding came from a
+  CVE intel record.
 - vulnerabilities/<finding-id>.md: one file per confirmed finding with
   full proof (request and response), impact, and fix.
 - run-log.md: updated with the final outcome, budgets used, and any

@@ -39,6 +39,10 @@ Return an attack surface inventory in this shape:
 - Object references: every id-like parameter and where it appears.
 - Auth model: how login, session, and roles work, as observed.
 - Interesting files: JS bundles, maps, configs, and backups found.
+- Fingerprint list for CVE intel: product or package, version or
+  unknown, ecosystem for packages, and source per item. A version
+  you could not find is listed as unknown with where you looked,
+  never guessed and never left out.
 - Out of scope items seen but not probed, listed separately.
 
 Mark anything you could not reach, and anything that needs credentials

@@ -60,7 +60,7 @@ target, scope, and authorization first.
 
 Only for local setups with a terminal and a workspace folder,
 such as a local Muse or Claude Code install. This is not needed
-for Muse.ai. It copies the 11 skills into your custom skills
+for Muse.ai. It copies the 12 skills into your custom skills
 folder so you can invoke them by name.
 
 ```bash
@@ -102,10 +102,11 @@ Pushing a v* tag by hand still works.
 
 ## What is inside
 
-11 skills, one per job:
+12 skills, one per job:
 
 - redmuse-orchestrator: the gate, the teams, the budgets, validation
 - redmuse-recon: attack surface inventory, passive first
+- redmuse-cve-intel: CVE intel from fingerprints, before any exploit team
 - redmuse-web: OWASP Top 10, black-box
 - redmuse-api: OWASP API Security Top 10
 - redmuse-auth: login, session, JWT, privilege boundaries
@@ -126,6 +127,8 @@ Plus:
   of the tool
 - `templates/`: finding, report, and run log templates
 - `tools/render_report.py`: findings.json to standalone HTML report
+- `tools/cve_lookup.py`: fingerprint list to CVE shortlist, OSV for
+  packages, NVD candidates for runtimes, standard library only
 - `test-target/` and `test-target-api/`: intentionally vulnerable
   localhost apps, fake data only, never deploy them publicly
 - `examples/`: real sample reports from localhost runs
@@ -142,6 +145,16 @@ Plus:
 ## Dev-audit mode
 
 For your own code in dev: code audit chained to live exploit proofs on localhost or staging, plus a Cloudflare edge checklist and Securly AI and agent layers when the target is an AI app. Dev does not waive the gate: target, scope, and authorization are still recorded first. See `skills/redmuse-dev-audit/SKILL.md` and `examples/sample-dev-audit.md`.
+
+## CVE intel
+
+Phase 1.5, after recon, before any exploit team: fingerprint the
+versions actually running, query live CVE data, and build a probe
+plan from the shortlist. Patched versions get no probe,
+unknown versions get no exploit attempt, and remote code execution
+gets version evidence only on live targets. See
+`skills/redmuse-cve-intel/SKILL.md` and
+`examples/sample-cve-intel.md`.
 
 ## Staying current
 

@@ -18,3 +18,9 @@ One file per confirmed finding, under
 - confirmed_by: skills that independently confirmed this finding.
 - confidence: score 0 to 5 and band (corroborated, confirmed, weak,
   unvalidated), with the points breakdown.
+- cve: vulnerability id when the finding came from a CVE intel
+  record, else blank.
+- fixed version: the patched version from the CVE record, else blank.
+- cve status: applicable, not-applicable, unvalidated, or
+  check-incomplete, when a CVE record exists.
+- exploit selected: the safe check run for the CVE record, else blank.
