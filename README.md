@@ -1,5 +1,7 @@
 # RedMuse
 
+![RedMuse logo](assets/logo.svg)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Engine: Muse](https://img.shields.io/badge/Engine-Muse-blue.svg)](https://muse.ai)
 [![Docker: none](https://img.shields.io/badge/Docker-not%20required-brightgreen.svg)](docs/ARCHITECTURE.md)
