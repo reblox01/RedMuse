@@ -1,0 +1,5 @@
+name: muse-strix-auth
+title: muse-strix auth and session testing
+description: Authentication, session, and JWT testing for a muse-strix run. Login flaws, token weaknesses, session handling, and privilege boundaries, on test accounts only.
+category: Work and knowledge
+include_in_prompt: false
