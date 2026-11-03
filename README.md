@@ -89,7 +89,7 @@ Every run starts with a phase 0 update check (redmuse-update, script
 tools/check_updates.py, sources in skills/redmuse-update/sources.yaml).
 RedMuse itself auto-pulls on a fast-forward
 only, before any target work. Strix, Securly, Cloudflare, Sentry, OWASP, Masriyan, Trail of Bits,
-and OpenAI are reference sources, not vendored code, so their changes
+OpenAI, ClawSec, Varlock, REA, and SquirrelScan are reference sources, not vendored code, so their changes
 are flagged
 as follow-up tasks instead of silently rewriting skill content.
 Nothing updates mid-run and nothing pushes automatically. Sources

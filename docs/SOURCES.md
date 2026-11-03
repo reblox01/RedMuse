@@ -120,13 +120,91 @@ here, the update check does not track it.
 ## OpenAI codex-security
 
 - Source: https://github.com/openai/codex-security (Apache-2.0)
-- Covers: threat-model, security-diff-scan, validation. This is
+- Covers: threat-model, security-diff-scan, validation,
+  propose-security-hardening, fix-finding. This is
   the open skill repo, not the Codex Security Cloud SaaS product,
   which is a separate paid workflow and is not tracked.
 - Version: upstream HEAD commit at check time.
 - Check: upstream HEAD via the public repo.
 - Auto-update: no. A delta becomes a follow-up task.
 - CLI: none.
+
+## ClawSec
+
+- Source: https://github.com/prompt-security/clawsec (AGPL-3.0)
+- Covers: soul-guardian (drift detection and baseline integrity
+  for agent workspace files), clawsec-scanner (skill integrity
+  verification before a skill is trusted), openclaw-audit-watchdog
+  (recurring automated audits). Found through the agenticskills.io
+  security directory and verified against the repo.
+- Scope note: ClawSec hardens the agent itself, not the target.
+  It is OpenClaw-oriented, and its soul-guardian auto-restore
+  behavior is opt-in and must never be enabled on a workspace
+  without the owner's explicit go. In RedMuse it is a reference
+  layer for skill integrity and drift, not a probe skill.
+- Version: upstream HEAD commit at check time.
+- Check: upstream HEAD via the public repo.
+- Auto-update: no. A delta becomes a follow-up task.
+- CLI: clawsec. Not installed on the demo VM; check on the run
+  machine. Reference only, never copied, which the AGPL license
+  also requires.
+
+## Varlock
+
+- Source: https://github.com/dmno-dev/varlock (MIT)
+- Covers: varlock-env-management. The agenticskills.io directory
+  entry is authored by wrsmith108, but the source repo is
+  dmno-dev/varlock, verified against the directory page, which
+  names that repo.
+- What it is: schema-driven environment variable management. A
+  committed .env.schema file declares names, types, and
+  sensitivity, and holds no values, so secrets never appear in
+  sessions, logs, or git. Commands: varlock load (validate,
+  masked output), varlock run (inject validated env into a
+  command), varlock init.
+- Fit for RedMuse: agent-side secret handling. It matches the
+  SAFETY.md rule that secrets are masked in every report and log,
+  and it is the pattern to point at when a target's config review
+  finds plaintext secrets in .env files.
+- Version: upstream HEAD commit at check time.
+- Check: upstream HEAD via the public repo.
+- Auto-update: no. A delta becomes a follow-up task.
+- CLI: varlock. Not installed on the demo VM; check on the run
+  machine.
+
+## REA
+
+- Source: https://github.com/morluto/rea (MIT)
+- Covers: reverse-engineering. Found through the agenticskills.io
+  security directory and verified against the repo. The repo
+  ships the reverse-engineer-anything skill plus an MCP server
+  and the rea-agents CLI, driving Ghidra, IDA Pro, Hopper, JADX,
+  and Binwalk.
+- Scope note: binary targets only, and only software the runner
+  owns or is authorized to research. REA does not recover
+  original source code, and its own docs say conclusions carry
+  evidence and caveats. Download only from the official repo,
+  rea.tools, or the rea-agents npm package: look-alike copies
+  have distributed trojans.
+- Version: upstream HEAD commit at check time.
+- Check: upstream HEAD via the public repo.
+- Auto-update: no. A delta becomes a follow-up task.
+- CLI: rea-agents, plus the analysis backends. None installed on
+  the demo VM; check on the run machine.
+
+## SquirrelScan
+
+- Source: https://github.com/squirrelscan/skills (MIT)
+- Covers: audit-website (300+ rules across SEO, performance,
+  security, technical, content, accessibility, and more, with an
+  LLM-optimized report and an iterative fix loop: audit, map
+  issues to source, fix, re-audit), plus the squirrelscan
+  companion skill for CLI setup.
+- Version: upstream HEAD commit at check time.
+- Check: upstream HEAD via the public repo.
+- Auto-update: no. A delta becomes a follow-up task.
+- CLI: squirrel. Not installed on the demo VM; check on the run
+  machine.
 
 ## Considered, not added
 
@@ -142,12 +220,14 @@ here, the update check does not track it.
   covered by the picked five. Exploit-development in particular
   goes beyond RedMuse's proof-of-concept on an authorized target.
 - agenticskills.io smart-contract scanners (Algorand, Cairo,
-  Cosmos, Solana, Substrate, TON) and other directory entries
-  (Azure Key Vault, Varlock, REA, ClawSec, Audit Website): niche
-  stacks or repos not verified from the directory page. The
-  directory itself is a listing, not a git source, so it is not a
-  tracked entry. The Trail of Bits and OpenAI entries above came
-  from that directory and were verified against their repos.
+  Cosmos, Solana, Substrate, TON): niche stacks. Azure Key Vault:
+  not tracked as a git source, because its directory page names
+  no repo; it is a Microsoft Learn docs skill that requires the
+  mcp_microsoftdocs MCP, and it is Azure-only. The directory
+  itself is a listing, not a git source, so it is not a tracked
+  entry. The Trail of Bits, OpenAI, ClawSec, Varlock, REA, and
+  SquirrelScan entries above came from that directory and were
+  verified against their repos.
 
 ## CLI availability
 

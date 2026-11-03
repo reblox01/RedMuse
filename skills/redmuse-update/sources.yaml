@@ -95,6 +95,8 @@ sources:
       - sarif-parsing
       - differential-review
       - variant-analysis
+      - semgrep-rule-creator
+      - semgrep-rule-variant-creator
     repo: https://github.com/trailofbits/skills.git
     kind: reference
     check: git-head
@@ -105,8 +107,44 @@ sources:
       - threat-model
       - security-diff-scan
       - validation
+      - propose-security-hardening
+      - fix-finding
     repo: https://github.com/openai/codex-security.git
     kind: reference
     check: git-head
     auto_update: none
     cli: none
+  - name: clawsec
+    covers:
+      - soul-guardian
+      - clawsec-scanner
+      - openclaw-audit-watchdog
+    repo: https://github.com/prompt-security/clawsec.git
+    kind: reference
+    check: git-head
+    auto_update: none
+    cli: clawsec
+  - name: varlock
+    covers:
+      - varlock-env-management
+    repo: https://github.com/dmno-dev/varlock.git
+    kind: reference
+    check: git-head
+    auto_update: none
+    cli: varlock
+  - name: rea
+    covers:
+      - reverse-engineering
+    repo: https://github.com/morluto/rea.git
+    kind: reference
+    check: git-head
+    auto_update: none
+    cli: rea-agents
+  - name: squirrelscan
+    covers:
+      - audit-website
+    repo: https://github.com/squirrelscan/skills.git
+    kind: reference
+    check: git-head
+    auto_update: none
+    cli: squirrel
