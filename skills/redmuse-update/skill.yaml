@@ -1,0 +1,5 @@
+name: redmuse-update
+title: RedMuse update check
+description: Pre-run freshness check for RedMuse and its reference sources. Runs before any run starts: auto-pulls RedMuse itself when the local clone is behind, checks Strix, Securly, and Cloudflare reference status, and flags methodology deltas instead of silently rewriting skill content.
+category: Work and knowledge
+include_in_prompt: false
