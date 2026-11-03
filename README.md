@@ -1,6 +1,6 @@
 # RedMuse
 
-![RedMuse logo](assets/logo.svg)
+![RedMuse logo](assets/logo.webp)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Engine: Muse](https://img.shields.io/badge/Engine-Muse-blue.svg)](https://muse.ai)
