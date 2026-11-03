@@ -95,6 +95,18 @@ as follow-up tasks instead of silently rewriting skill content.
 Nothing updates mid-run and nothing pushes automatically. Sources
 and their check rules live in docs/SOURCES.md.
 
+## Ensemble scoring
+
+RedMuse runs overlapping skills on the same surface on purpose, so
+if one skill misses something, another may find it. Candidate
+records that share a finding merge into one, with a confirmed_by
+list and a confidence score from evidence: live proof, traced code
+path, and extra confirming skills, total 0 to 5, banded as
+corroborated, confirmed, weak, or unvalidated. The report also
+carries a coverage matrix, flags single-coverage classes, and
+lists unprobed classes as gaps, never as clean. See
+examples/sample-ensemble.md.
+
 ## Proven on localhost
 
 Web test target, quick run: 2 high (IDOR, API BOLA), 1 medium

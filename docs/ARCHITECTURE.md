@@ -213,3 +213,20 @@ is tools/check_updates.py, the machine-readable registry is
 skills/redmuse-update/sources.yaml, and docs/SOURCES.md is the
 human-readable companion. The sample output is
 examples/sample-update-check.md.
+
+## Ensemble scoring
+
+RedMuse runs overlapping skills on the same surface so one skill
+missing a finding does not end the story. Candidate records that
+share endpoint, parameter, and CWE, or a root cause and data flow,
+merge into one finding with a confirmed_by list. Confidence scores
+from evidence: 2 points for a reproduced live proof, 1 for a
+traced code path, 1 per additional confirming skill capped at 2,
+total 0 to 5. Bands are 4 to 5 corroborated, 2 to 3 confirmed,
+1 weak, 0 unvalidated. A live proof alone stays confirmed;
+ensemble only adds corroboration. The report carries a coverage
+matrix of classes against assigned skills, flags single-coverage
+classes, and lists unassigned classes as gaps, never as clean.
+External skills are reference only: when one is not installed, its
+column is skipped, not clean. The worked example is
+examples/sample-ensemble.md.
