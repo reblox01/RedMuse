@@ -48,6 +48,17 @@ Teams run in parallel where the target allows it, and sequentially where
 one phase feeds the next. Give each team its slice of scope, its probe
 budget, and the rule that raw output comes back structured, not as prose.
 
+## Ensemble
+
+Assign overlapping skills to the same surface on purpose: code gets
+redmuse-code plus OWASP, Sentry, and Cloudflare layers when
+installed; web gets redmuse-web plus Masriyan web-security; CI and
+diff get redmuse-ci plus Sentry gha-security-review, Trail of Bits
+differential-review, and OpenAI security-diff-scan. The report
+phase merges their candidate records, scores confidence, and
+writes the coverage matrix. A skill that is not installed is
+recorded as skipped for that surface, never as a clean result.
+
 ## Finding record
 
 Every candidate finding comes back in this shape, no exceptions:

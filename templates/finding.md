@@ -15,3 +15,6 @@ One file per confirmed finding, under
 - impact: what an attacker actually gains.
 - fix: the root cause fix.
 - affected endpoints: other endpoints with the same root cause, if any.
+- confirmed_by: skills that independently confirmed this finding.
+- confidence: score 0 to 5 and band (corroborated, confirmed, weak,
+  unvalidated), with the points breakdown.

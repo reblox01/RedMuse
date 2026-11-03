@@ -33,6 +33,17 @@ unvalidated.
 
 Classes probed with nothing found, and what was tried per class.
 
+## Ensemble and coverage matrix
+
+- Merged findings: which candidate records merged, and the
+  confirmed_by list per merged finding.
+- Confidence: score and band per finding.
+- Coverage matrix: one row per class, one column per assigned
+  skill, marked probed, found, clean, or not probed.
+- Single coverage classes: classes probed by exactly one skill.
+- Gaps: classes with no assigned skill, listed as gaps, never as
+  clean.
+
 ## Retest
 
 After fixes, one line per fixed finding: fixed, still open, or changed.
