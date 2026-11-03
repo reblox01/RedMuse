@@ -1,0 +1,5 @@
+name: muse-strix-recon
+title: muse-strix recon
+description: Build the attack surface inventory for a muse-strix run. Passive recon first, then light active enumeration inside the agreed scope. Returns endpoints, parameters, technologies, and assets, never findings.
+category: Work and knowledge
+include_in_prompt: false
