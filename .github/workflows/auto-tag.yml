@@ -1,0 +1,66 @@
+name: Auto tag
+
+on:
+  push:
+    branches: [main]
+    paths: ["skills/**"]
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Decide next version
+        id: version
+        run: |
+          before="${{ github.event.before }}"
+          sha="${{ github.sha }}"
+          if [ "$before" = "0000000000000000000000000000000000000000" ]; then
+            changed=true
+            messages=$(git log --format=%B -n 20 "$sha")
+          else
+            if git diff --quiet "$before" "$sha" -- skills/; then
+              changed=false
+            else
+              changed=true
+            fi
+            messages=$(git log --format=%B "$before..$sha")
+          fi
+          if [ "$changed" = "false" ]; then
+            echo "tagged=false" >> "$GITHUB_OUTPUT"
+            echo "No skills change in range, skipping."
+            exit 0
+          fi
+          if echo "$messages" | grep -q "\[skip-release\]"; then
+            echo "tagged=false" >> "$GITHUB_OUTPUT"
+            echo "skip-release found, skipping."
+            exit 0
+          fi
+          latest=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          if [ -z "$latest" ]; then
+            echo "new=v0.1.0" >> "$GITHUB_OUTPUT"
+            echo "tagged=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          v=${latest#v}
+          major=${v%%.*}; rest=${v#*.}; minor=${rest%%.*}; patch=${rest#*.}
+          if echo "$messages" | grep -q "\[release:major\]"; then
+            major=$((major + 1)); minor=0; patch=0
+          elif echo "$messages" | grep -q "\[release:minor\]"; then
+            minor=$((minor + 1)); patch=0
+          else
+            patch=$((patch + 1))
+          fi
+          echo "new=v$major.$minor.$patch" >> "$GITHUB_OUTPUT"
+          echo "tagged=true" >> "$GITHUB_OUTPUT"
+      - name: Create and push tag
+        if: steps.version.outputs.tagged == 'true'
+        run: |
+          new="${{ steps.version.outputs.new }}"
+          git tag "$new" || echo "tag $new already exists"
+          git push origin "$new" || echo "tag $new already pushed, skipping"

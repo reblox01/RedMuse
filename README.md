@@ -91,7 +91,13 @@ stays pinned until you ask Muse to install a newer tag. CI runs
 on every push to main (.github/workflows/ci.yml): skill files
 present, sources.yaml valid and covering every skill, report
 renderer smoke test, and the update check as an informational
-step. The release workflow runs only when a v* tag is pushed.
+step. The release workflow runs when a v* tag exists, and tags
+are automatic: .github/workflows/auto-tag.yml watches skills/
+on main, so any push that edits skills/ creates the next patch
+tag (first tag v0.1.0), which then triggers the release. Put
+[release:minor] or [release:major] in a commit message to bump
+more, or [skip-release] to skip a tag for a trivial edit.
+Pushing a v* tag by hand still works.
 
 ## What is inside
 
