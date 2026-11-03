@@ -1,21 +1,23 @@
 # RedMuse
 
-![RedMuse logo](assets/logo.webp)
+**RedMuse - Autonomous pentesting, built for Muse.ai.**
+
+![RedMuse banner](assets/banner.webp)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Engine: Muse](https://img.shields.io/badge/Engine-Muse-blue.svg)](https://muse.ai)
+[![Engine: Muse.ai](https://img.shields.io/badge/Engine-Muse.ai-blue.svg)](https://muse.ai)
 [![Docker: none](https://img.shields.io/badge/Docker-not%20required-brightgreen.svg)](docs/ARCHITECTURE.md)
 [![LLM key: none](https://img.shields.io/badge/LLM%20key-not%20required-brightgreen.svg)](docs/ARCHITECTURE.md)
 
-Muse-native autonomous pentesting, built for Muse. No Docker, no LLM
-key, no separate engine. Muse is the engine: an orchestrator plus
-specialist agents run recon, exploitation, proof-of-concept validation,
-fixing, and reporting against targets you own or are authorized to
-test.
+Autonomous pentesting, built for Muse.ai, Meta's personal AI agent.
+No Docker, no LLM key, no separate engine. Muse is the engine: an
+orchestrator plus specialist agents run recon, exploitation,
+proof-of-concept validation, fixing, and reporting against targets
+you own or are authorized to test.
 
 Inspired by the architecture of [Strix](https://github.com/usestrix/strix)
 (agent graph, skill packs, sandbox runtime, SARIF-style reporting),
-rebuilt from scratch as skills and playbooks that any Muse user can
+rebuilt from scratch as skills and playbooks that anyone with Muse.ai can
 install and run. Skill content here is original writing. Strix itself
 is Apache-2.0, and its methodology topics (OWASP Top 10, API Top 10,
 IDOR, SSRF, and friends) are credited in `docs/ARCHITECTURE.md`.
@@ -28,7 +30,7 @@ cd redmuse
 ./scripts/install.sh
 ```
 
-Then, in Muse:
+Then, in Muse.ai:
 
 ```text
 Run redmuse-orchestrator against https://staging.example.com, mode quick.
@@ -89,12 +91,12 @@ API test target, quick run: 2 high (BOLA, mass assignment), 2 medium
 
 | | redmuse | Strix CLI | Strix Cloud | ZAP / Nuclei |
 |---|---|---|---|---|
-| Engine | Muse itself | Any LLM via key | Hosted | Signatures |
+| Engine | Muse.ai itself | Any LLM via key | Hosted | Signatures |
 | Infra needed | None | Docker | None | Local binary |
 | Cost | Free | LLM key cost | Credits | Free |
 | Findings | Proved with PoC | Proved with PoC | Proved with PoC | Alerts, often unproved |
 | Sandbox | Workspace | Fresh container | Hosted | None |
-| Best for | Muse users, fast | Full local control | Teams, schedules | Quick signature scans |
+| Best for | Muse.ai users, fast | Full local control | Teams, schedules | Quick signature scans |
 
 Honest limits: the workspace is the sandbox, not a fresh container per
 target, and one brain with subagent teams is less parallel than a true
