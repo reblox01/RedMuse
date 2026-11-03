@@ -92,8 +92,9 @@ on every push to main (.github/workflows/ci.yml): skill files
 present, sources.yaml valid and covering every skill, report
 renderer smoke test, and the update check as an informational
 step. The release workflow runs when a v* tag exists, and tags
-are automatic: .github/workflows/auto-tag.yml watches skills/
-on main, so any push that edits skills/ creates the next patch
+are automatic: .github/workflows/auto-tag.yml watches every
+push to main except workflow, README, and LICENSE changes,
+so any push that edits anything else creates the next patch
 tag (first tag v0.1.0), which then triggers the release. Put
 [release:minor] or [release:major] in a commit message to bump
 more, or [skip-release] to skip a tag for a trivial edit.
