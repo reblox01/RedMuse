@@ -179,6 +179,17 @@ API test target, quick run: 2 high (BOLA, mass assignment), 2 medium
 
 Dev-audit demo: code location plus live proof for the web target IDOR, XSS, and redirect flaws. See `examples/sample-dev-audit.md`.
 
+## Proven live (anonymized)
+
+Same engine, real authorized targets, 3 Nov 2026: 3 live sites in quick
+mode plus 2 codebases in dev-audit mode. Targets are anonymized, no
+domains or repo names are listed. Totals: 0 critical, 2 high, 4 medium,
+8 low, 14 info across the 5 runs, plus one major question left honestly
+unvalidated (a PHP runtime version question that could not be answered
+from outside and was not exploited). See
+`examples/live-runs-anonymized.md` for the per-run tables, what was
+found, what was checked clean, and what was left as gaps.
+
 ## How it compares
 
 | | redmuse | Strix CLI | Strix Cloud | ZAP / Nuclei |
