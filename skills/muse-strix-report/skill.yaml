@@ -1,0 +1,5 @@
+name: muse-strix-report
+title: muse-strix reporting
+description: Turn muse-strix findings into a ranked report and a retest loop. Severity by reachability and impact, dedupe by root cause, honest coverage statements, one file per finding.
+category: Work and knowledge
+include_in_prompt: false
