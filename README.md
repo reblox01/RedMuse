@@ -133,7 +133,7 @@ Plus:
   packages, NVD candidates for runtimes, standard library only
 - `test-target/` and `test-target-api/`: intentionally vulnerable
   localhost apps, fake data only, never deploy them publicly
-- `examples/`: real sample reports from localhost runs
+- `examples/`: real sample reports from localhost runs, plus a worked MCP setup record
 
 ## Scan modes
 
@@ -165,11 +165,27 @@ itself. The MCP is a toolbelt: it stays full power, and RedMuse
 picks which tool, when, on what target, and with what input. The
 same MCP is called passively on production and actively on
 localhost or staging, because the target changed, not the tool.
-No-key tools are offered first (SniffPup, Context7, next-devtools,
-cybersecurity NVD lookup), keyed tools get a per-tool ask plus a
-step-by-step walkthrough to get the key on the official site, and
-a key is never pasted in chat, in a log, or in a report. See
-`skills/redmuse-mcp/SKILL.md` and `docs/MCPs.md`.
+
+Phase 0.5, after the update check and before recon, offers MCPs
+one at a time. No-key tools first, keyed tools second with a
+per-tool ask plus a step-by-step walkthrough to get the key on
+the official site, and a key is never pasted in chat, in a log,
+or in a report. A declined or unavailable MCP is recorded as not
+run, never clean, and RedMuse works with zero MCPs.
+
+Starter set, and what each one feeds:
+
+| MCP | Needs | Feeds |
+|---|---|---|
+| SniffPup, passive scan | Site confirmation, per site, hosted, no key | Recon |
+| Context7, docs lookup | Hosted connection | Recon, code |
+| next-devtools, dev-server inspection | Running Next.js 16+ dev server, local, no key | Dev-audit, code |
+| cybersecurity MCP, NVD lookup | Nothing, NVD is free, local, no key | CVE intel |
+
+Every offer states hosted or local, because local MCPs do not work
+from a Muse.ai session, only on the user's own machine. See
+`skills/redmuse-mcp/SKILL.md`, `docs/MCPs.md`, and the worked
+setup in `examples/sample-mcp-setup.md`.
 
 ## Staying current
 
