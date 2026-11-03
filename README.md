@@ -135,6 +135,62 @@ Plus:
   localhost apps, fake data only, never deploy them publicly
 - [`examples/`](examples/): real sample reports from localhost runs, plus a worked MCP setup record
 
+## Architecture
+
+Muse is the engine. There is no Docker container, no LLM key, and
+no separate scanner binary to install. An orchestrator plus
+specialist subagents run the phases, and every phase writes to
+one run folder. Full detail lives in
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md), and the background
+research behind it lives in [docs/RESEARCH.md](docs/RESEARCH.md).
+
+```mermaid
+flowchart TD
+    User["User: owns or is authorized\nto test the target"]
+    Gate["Orchestrator: gate\ntarget, scope, mode, budget,\nauthorization in run-log.md"]
+    Update["Phase 0: update check\nRedMuse fast-forward only"]
+    MCP["Phase 0.5: MCP layer\nfull-power MCPs,\nRedMuse governs the call"]
+    Recon["Phase 1: recon\npassive first, then light\nactive enumeration"]
+    CVE["Phase 1.5: CVE intel\nfingerprints to probe plan"]
+    Exploit["Exploit teams\nweb, API, auth, code"]
+    Validate["Validate\nreproduce every proof,\nor mark unvalidated"]
+    Report["Report\nreport.md, findings.json,\none file per finding"]
+    Fix["Fix and retest\nonly the fixed proofs"]
+
+    User --> Gate
+    Gate --> Update
+    Update --> MCP
+    MCP --> Recon
+    Recon --> CVE
+    CVE --> Exploit
+    Exploit --> Validate
+    Validate --> Report
+    Report --> Fix
+```
+
+How the pieces fit:
+
+- **Orchestrator, not a single agent.** It owns the gate, the
+  budgets, and the final severity call. It never does every phase
+  itself in one long pass, and a subagent claim is not a finding
+  until the orchestrator reproduces the proof or marks it
+  unvalidated.
+- **Phases feed each other, in order.** Recon builds the attack
+  surface, CVE intel turns fingerprints into a probe plan, exploit
+  teams only work their class list plus that plan, and validation
+  decides what survives into the report.
+- **MCPs and ensemble skills are layers, not separate scans.**
+  MCP results and overlapping skills feed recon, CVE intel, and
+  the coverage matrix, and a layer that did not run is recorded
+  as not run, never as clean.
+- **The workspace is the sandbox.** That is the honest limit:
+  isolation is weaker than a fresh container per target, which
+  is why payloads stay non-destructive and test accounts only.
+- **Output is always the same shape.** A run folder holds the
+  run log, the ranked report, the machine-readable findings, and
+  one file per confirmed finding, so a fix and retest can target
+  exactly the proofs that were open.
+
 ## Scan modes
 
 | Mode | Meaning | Probes | Time | Teams |
