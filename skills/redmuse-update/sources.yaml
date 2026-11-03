@@ -1,0 +1,55 @@
+# Machine-readable source registry for the RedMuse update check.
+#
+# This file is the single source of truth for tools/check_updates.py.
+# To find where a skill comes from, look up its name in the covers
+# list of an entry. Adding a source here is enough to have it
+# checked; no script edit is needed.
+#
+# Fields per source:
+#   name: short id used in check output.
+#   covers: skill names or layers this source is the origin of.
+#   repo: git URL, when the source is a git repo. Omitted for manual
+#     sources, which have no version endpoint.
+#   kind: self (this repo), reference (tracked, never vendored),
+#     manual (no version endpoint, reviewed by hand).
+#   check: git-head (compare upstream HEAD) or manual.
+#   auto_update: fast-forward-pull (RedMuse itself only) or none.
+#     none means a delta becomes a follow-up task, never a rewrite.
+sources:
+  - name: redmuse
+    covers:
+      - redmuse-orchestrator
+      - redmuse-recon
+      - redmuse-web
+      - redmuse-api
+      - redmuse-auth
+      - redmuse-code
+      - redmuse-report
+      - redmuse-fix
+      - redmuse-ci
+      - redmuse-dev-audit
+      - redmuse-update
+    repo: https://github.com/reblox01/RedMuse.git
+    kind: self
+    check: git-head
+    auto_update: fast-forward-pull
+  - name: strix
+    covers:
+      - methodology-reference
+    repo: https://github.com/usestrix/strix.git
+    kind: reference
+    check: git-head
+    auto_update: none
+  - name: securly
+    covers:
+      - dev-audit-ai-agent-layer
+    repo: https://github.com/BghitCode/Securly.git
+    kind: reference
+    check: git-head
+    auto_update: none
+  - name: cloudflare
+    covers:
+      - dev-audit-edge-checklist
+    kind: manual
+    check: manual
+    auto_update: none
