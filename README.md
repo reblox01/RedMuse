@@ -24,21 +24,53 @@ IDOR, SSRF, and friends) are credited in `docs/ARCHITECTURE.md`.
 
 ## Quick start
 
+### In Muse.ai: no terminal needed
+
+You do not clone anything. Ask Muse to load the pack, and it
+fetches the skills from the repo. Paste this, replacing the
+target with your own:
+
+```text
+Load the RedMuse skill pack from https://github.com/reblox01/RedMuse
+and run a quick scan of https://staging.example.com.
+I own this target and authorize active testing on it.
+Start with the authorization gate, then run the phases and write
+the report.
+```
+
+Same install, other jobs:
+
+```text
+Load the RedMuse skill pack from https://github.com/reblox01/RedMuse
+and run a dev-audit of my code against my localhost staging copy.
+Code audit first, then a live proof for each finding, then fix
+and retest.
+```
+
+```text
+Load the RedMuse skill pack from https://github.com/reblox01/RedMuse
+and fix the open findings in redmuse-runs/<run-name>/, one finding
+at a time, retesting each original proof before closing it.
+```
+
+No active test runs without the gate: the orchestrator records
+target, scope, and authorization first.
+
+### On your own PC: terminal install
+
+Only for local setups with a terminal and a workspace folder,
+such as a local Muse or Claude Code install. This is not needed
+for Muse.ai. It copies the 11 skills into your custom skills
+folder so you can invoke them by name.
+
 ```bash
 git clone https://github.com/reblox01/redmuse.git
 cd redmuse
 ./scripts/install.sh
 ```
 
-Then, in Muse.ai:
-
-```text
-Run redmuse-orchestrator against https://staging.example.com, mode quick.
-I own this target and authorize active testing on it.
-```
-
-The orchestrator records the authorization gate first, then runs the
-phases and writes the report. No active test runs without the gate.
+Then invoke redmuse-orchestrator with the same target, scope,
+and authorization as above.
 
 ## What is inside
 

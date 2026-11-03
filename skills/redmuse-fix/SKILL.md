@@ -45,3 +45,16 @@ Return a fix report: per finding, the patch summary (files changed,
 lines, approach), the retest result, and the new status. List fixes
 that need a decision from the owner (migration, breaking change,
 secret rotation) separately from fixes already applied.
+
+## Local fix loop
+
+If the runner has a local workflow skill library installed, run
+the fix through its fix loop instead of improvising one. Example:
+on Claude Code with gstack installed, /investigate diagnoses
+before changing code, /verify runs fix, retest, repeat, and /qa
+reproduces, fixes, and re-verifies. RedMuse's rules still govern:
+one finding at a time, root cause not symptom, minimal patch,
+never close without retesting the original proof. A local fix
+loop never overrides the authorization gate or the retest rule.
+If no such skill is installed, follow this file's patch rules
+directly.
