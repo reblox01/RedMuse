@@ -60,7 +60,7 @@ target, scope, and authorization first.
 
 Only for local setups with a terminal and a workspace folder,
 such as a local Muse or Claude Code install. This is not needed
-for Muse.ai. It copies the 12 skills into your custom skills
+for Muse.ai. It copies the 13 skills into your custom skills
 folder so you can invoke them by name.
 
 ```bash
@@ -102,7 +102,7 @@ Pushing a v* tag by hand still works.
 
 ## What is inside
 
-12 skills, one per job:
+13 skills, one per job:
 
 - redmuse-orchestrator: the gate, the teams, the budgets, validation
 - redmuse-recon: attack surface inventory, passive first
@@ -116,6 +116,7 @@ Pushing a v* tag by hand still works.
 - redmuse-ci: diff-scoped merge gate for GitHub Actions
 - redmuse-dev-audit: dev audit, code chained to live proof on dev and staging
 - redmuse-update: pre-run update check, auto-pull for RedMuse itself, flags for reference sources
+- redmuse-mcp: optional MCP layer, set up in phase 0.5. MCPs stay full power, RedMuse governs the call, no-key tools first, keyed tools with a step-by-step walkthrough, declined or unavailable means not run, never clean
 
 Plus:
 
@@ -123,6 +124,7 @@ Plus:
   what makes a security tool spread
 - `docs/ARCHITECTURE.md`: Strix-to-Muse mapping, scan modes, team
   protocols, tool tiers, report schema, sandbox modes
+- `docs/MCPs.md`: optional MCP layer, full-power MCPs governed by RedMuse
 - `docs/SAFETY.md`: the authorization gate and the rules that are part
   of the tool
 - `templates/`: finding, report, and run log templates
@@ -155,6 +157,19 @@ unknown versions get no exploit attempt, and remote code execution
 gets version evidence only on live targets. See
 `skills/redmuse-cve-intel/SKILL.md` and
 `examples/sample-cve-intel.md`.
+
+## MCP layer
+
+Optional tools, governed by RedMuse, never limited at the MCP
+itself. The MCP is a toolbelt: it stays full power, and RedMuse
+picks which tool, when, on what target, and with what input. The
+same MCP is called passively on production and actively on
+localhost or staging, because the target changed, not the tool.
+No-key tools are offered first (SniffPup, Context7, next-devtools,
+cybersecurity NVD lookup), keyed tools get a per-tool ask plus a
+step-by-step walkthrough to get the key on the official site, and
+a key is never pasted in chat, in a log, or in a report. See
+`skills/redmuse-mcp/SKILL.md` and `docs/MCPs.md`.
 
 ## Staying current
 

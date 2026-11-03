@@ -32,6 +32,7 @@ sources:
       - redmuse-ci
       - redmuse-dev-audit
       - redmuse-update
+      - redmuse-mcp
     repo: https://github.com/reblox01/RedMuse.git
     kind: self
     check: git-head

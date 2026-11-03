@@ -1,0 +1,5 @@
+name: redmuse-mcp
+title: RedMuse MCP layer
+description: Optional MCP tools for a RedMuse run, governed by RedMuse, never limited at the MCP itself. MCPs stay full power; RedMuse picks which tool, when, on what target, and with what input. No-key tools are offered first, keyed tools get a per-tool ask plus a step-by-step key walkthrough, and a declined or unavailable MCP is recorded as not run, never as clean.
+category: Work and knowledge
+include_in_prompt: false

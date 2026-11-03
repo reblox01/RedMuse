@@ -12,6 +12,7 @@ One paragraph: what was tested, what was found, and the overall posture.
 - Mode: quick or deep
 - Budgets used: probes, wall time, teams
 - Phases run:
+- MCPs: accepted, declined, or unavailable, with the reason per MCP
 - Classes probed:
 - Classes not probed, and why:
 - Run outcome: complete or partial

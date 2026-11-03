@@ -42,6 +42,10 @@ orchestrator reproduces the proof of concept or marks it unvalidated.
 
 1. Gate: target, scope, mode, budget, and the user's authorization, all
    recorded in run-log.md before anything active runs.
+   MCP setup sits between the gate and recon (phase 0.5, see
+   docs/MCPs.md): MCPs stay full power, RedMuse governs every call,
+   and the call changes with the target, passive on production,
+   active on localhost or staging.
 2. Recon: build the attack surface inventory. Passive first, then light
    active enumeration inside the agreed scope.
 3. CVE intel: from recon fingerprints, query live CVE data and build

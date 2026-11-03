@@ -33,6 +33,17 @@ mid-run, and nothing pushes automatically. A run that skipped the
 check, or proceeded under a staleness warning, says so in its
 report.
 
+## Phase 0.5: MCP setup
+
+After the update check, before recon, run redmuse-mcp. Offer MCPs
+one at a time, no-key tools first, keyed tools second, and record
+in run-log.md which were accepted, declined, or unavailable.
+MCPs stay full power; RedMuse governs the call, so the same MCP
+is called passively on production and actively on localhost or
+staging. A declined or unavailable MCP is recorded as not run,
+never as clean, and a run with zero MCPs continues on the built-in
+skills alone.
+
 ## Phase 1.5: CVE intel
 
 After recon, before any exploit team starts, run redmuse-cve-intel.
@@ -52,6 +63,8 @@ yourself in one long pass.
 - Recon: redmuse-recon. Read-only. Runs first, always.
 - CVE intel: redmuse-cve-intel. Live CVE lookup from fingerprints.
   Runs second, before any exploit team.
+- MCP: redmuse-mcp. Optional tool layer, set up in phase 0.5.
+  Feeds recon, CVE intel, and ensemble; never waives the gate.
 - Web: redmuse-web. Black-box OWASP Top 10.
 - API: redmuse-api. OWASP API Security Top 10.
 - Code: redmuse-code. White-box, only when source is in scope.
