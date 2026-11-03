@@ -1,0 +1,5 @@
+name: redmuse-dev-audit
+title: RedMuse dev audit
+description: Audit code in dev and prove it live. White-box code review chained to live exploit proofs on localhost or staging, plus a Cloudflare edge checklist and a Securly AI and agent layer when the target is an AI app. Dev targets only, under the RedMuse authorization gate.
+category: Work and knowledge
+include_in_prompt: false
