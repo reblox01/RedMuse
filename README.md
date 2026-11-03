@@ -42,7 +42,7 @@ phases and writes the report. No active test runs without the gate.
 
 ## What is inside
 
-9 skills, one per job:
+10 skills, one per job:
 
 - redmuse-orchestrator: the gate, the teams, the budgets, validation
 - redmuse-recon: attack surface inventory, passive first
@@ -53,6 +53,7 @@ phases and writes the report. No active test runs without the gate.
 - redmuse-report: severity, dedupe, honest coverage, retest
 - redmuse-fix: root cause patch plus retest loop
 - redmuse-ci: diff-scoped merge gate for GitHub Actions
+- redmuse-dev-audit: dev audit, code chained to live proof on dev and staging
 
 Plus:
 
@@ -77,6 +78,10 @@ Plus:
 | deep | Every parameter and edge case, chained findings | 300 | 4 h | 5 |
 | diff | Changed code only, for pull requests | 100 | 1 h | 2 |
 
+## Dev-audit mode
+
+For your own code in dev: code audit chained to live exploit proofs on localhost or staging, plus a Cloudflare edge checklist and Securly AI and agent layers when the target is an AI app. Dev does not waive the gate: target, scope, and authorization are still recorded first. See `skills/redmuse-dev-audit/SKILL.md` and `examples/sample-dev-audit.md`.
+
 ## Proven on localhost
 
 Web test target, quick run: 2 high (IDOR, API BOLA), 1 medium
@@ -86,6 +91,8 @@ reproduced live. See `examples/sample-report-localhost.md`.
 API test target, quick run: 2 high (BOLA, mass assignment), 2 medium
 (admin bypass, excessive data exposure). All reproduced live. See
 `examples/sample-report-api.md`.
+
+Dev-audit demo: code location plus live proof for the web target IDOR, XSS, and redirect flaws. See `examples/sample-dev-audit.md`.
 
 ## How it compares
 

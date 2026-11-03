@@ -162,3 +162,38 @@ built from this schema.
 - Cloud mode (user choice): hand the run to real Strix Cloud through
   the managed skill, and keep redmuse as the triage and retest
   layer around it.
+
+## Dev-audit mode
+
+Dev-audit is for targets the user owns and runs in development:
+localhost, a dev environment, or a staging environment, with the
+source code available. It chains the code skill to the live exploit
+skills: audit the code, prove each finding live, fix the root cause,
+retest the proof. A code finding without a live proof is unvalidated.
+A live finding without a traced code path is not a dev-audit finding.
+
+Dev does not waive the gate. Target, scope, mode, budgets, and the
+user's explicit authorization are recorded in the run log before
+anything active runs, exactly as in every other mode. Production is
+never a dev-audit target unless the scope line says so explicitly and
+separately.
+
+Two optional layers extend the chain:
+
+- Cloudflare edge checklist: TLS, security headers, WAF behavior on a
+  benign test path, cache behavior for private responses, origin
+  exposure, and DNS leakage, on the user's own domain only. There is
+  no bundled Cloudflare skill in the pack, so the checklist is
+  original RedMuse writing, and dashboard items without owner access
+  are recorded as not probed, never as clean.
+- Securly AI and agent layers, when the target is an AI chatbot, LLM
+  app, agent, or mobile app: agent controls, LLM security, OWASP
+  baseline, and mobile controls, using the Securly audit checklist as
+  the rubric. Layers that do not apply are named as skipped, with a
+  reason.
+
+Dev-audit output adds code location (file, function, line when
+known), live proof, Cloudflare notes, and Securly layers applied or
+skipped to every finding record. Scenarios (unauthenticated,
+authenticated, privilege, business logic, and AI or agent chains)
+are built from confirmed findings only, with test data only.
