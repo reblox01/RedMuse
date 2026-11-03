@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Every skill ships SKILL.md and skill.yaml
+        run: |
+          python3 - <<'EOF'
+          from pathlib import Path
+          skills = sorted(Path("skills").glob("redmuse-*/"))
+          assert skills, "no skills found"
+          for skill in skills:
+              assert (skill / "SKILL.md").is_file(), f"missing SKILL.md in {skill}"
+              assert (skill / "skill.yaml").is_file(), f"missing skill.yaml in {skill}"
+          print(f"{len(skills)} skills OK")
+          EOF
+      - name: sources.yaml parses and covers every skill
+        run: |
+          python3 - <<'EOF'
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, "tools")
+          import check_updates
+          sources = check_updates.parse_sources(Path("skills/redmuse-update/sources.yaml"))
+          assert sources, "no sources"
+          covered = {c for s in sources for c in s["covers"]}
+          missing = [p.name for p in Path("skills").glob("redmuse-*/") if p.name not in covered]
+          assert not missing, f"skills missing from sources.yaml covers: {missing}"
+          print(f"{len(sources)} sources OK, all skills covered")
+          EOF
+      - name: Report renderer smoke test
+        run: |
+          python3 tools/render_report.py examples/sample-findings.json /tmp/report.html
+          test -s /tmp/report.html
+      - name: Update check runs (informational)
+        continue-on-error: true
+        run: python3 tools/check_updates.py

@@ -1,0 +1,43 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build skill pack zip
+        run: |
+          python3 - <<'EOF'
+          import zipfile
+          from pathlib import Path
+          tag = "${{ github.ref_name }}"
+          out = f"redmuse-{tag}.zip"
+          include = ["skills", "docs", "templates", "tools", "scripts",
+                     "examples", "README.md", "LICENSE", "CONTRIBUTING.md"]
+          with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as zf:
+              for item in include:
+                  p = Path(item)
+                  if p.is_file():
+                      zf.write(p, p.name)
+                  elif p.is_dir():
+                      for f in sorted(p.rglob("*")):
+                          if f.is_file():
+                              zf.write(f, f)
+          print(f"built {out}")
+          EOF
+          ls -la redmuse-*.zip
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "RedMuse ${{ github.ref_name }}" \
+            --notes "Skill pack release. Install by asking Muse to install RedMuse ${{ github.ref_name }} from https://github.com/reblox01/RedMuse, or download the zip below and install it with scripts/install.sh. Test targets are not in the zip; they stay in the repo for demos only. Push a new tag for each release." \
+            redmuse-*.zip

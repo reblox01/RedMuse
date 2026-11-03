@@ -26,12 +26,12 @@ IDOR, SSRF, and friends) are credited in `docs/ARCHITECTURE.md`.
 
 ### In Muse.ai: no terminal needed
 
-You do not clone anything. Ask Muse to load the pack, and it
+You do not clone anything. Ask Muse to install the pack, and it
 fetches the skills from the repo. Paste this, replacing the
 target with your own:
 
 ```text
-Load the RedMuse skill pack from https://github.com/reblox01/RedMuse
+Install the RedMuse skill pack from https://github.com/reblox01/RedMuse
 and run a quick scan of https://staging.example.com.
 I own this target and authorize active testing on it.
 Start with the authorization gate, then run the phases and write
@@ -41,14 +41,14 @@ the report.
 Same install, other jobs:
 
 ```text
-Load the RedMuse skill pack from https://github.com/reblox01/RedMuse
+Install the RedMuse skill pack from https://github.com/reblox01/RedMuse
 and run a dev-audit of my code against my localhost staging copy.
 Code audit first, then a live proof for each finding, then fix
 and retest.
 ```
 
 ```text
-Load the RedMuse skill pack from https://github.com/reblox01/RedMuse
+Install the RedMuse skill pack from https://github.com/reblox01/RedMuse
 and fix the open findings in redmuse-runs/<run-name>/, one finding
 at a time, retesting each original proof before closing it.
 ```
@@ -71,6 +71,27 @@ cd redmuse
 
 Then invoke redmuse-orchestrator with the same target, scope,
 and authorization as above.
+
+## Releases
+
+Tagged versions (v1.0.0, ...) ship a zip of the skill pack on
+the Releases page, built by .github/workflows/release.yml. The
+zip holds skills, docs, templates, tools, scripts, and examples.
+The test targets are not in the zip; they stay in the repo for
+demos only. To install a pinned version, ask Muse to install
+that tag instead of main:
+
+```text
+Install the RedMuse skill pack version v1.0.0 from
+https://github.com/reblox01/RedMuse.
+```
+
+The phase 0 update check tracks git HEAD, so a pinned install
+stays pinned until you ask Muse to install a newer tag. CI runs
+on every push to main (.github/workflows/ci.yml): skill files
+present, sources.yaml valid and covering every skill, report
+renderer smoke test, and the update check as an informational
+step. The release workflow runs only when a v* tag is pushed.
 
 ## What is inside
 
