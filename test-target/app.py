@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""muse-strix test target. INTENTIONALLY VULNERABLE. Localhost only.
+"""redmuse test target. INTENTIONALLY VULNERABLE. Localhost only.
 
 A tiny fake app (Python standard library only, no dependencies) with
-four planted flaws so a muse-strix run can prove itself end to end:
+four planted flaws so a redmuse run can prove itself end to end:
 
 - IDOR on /user?id= (no ownership check, any id returns that user)
 - Reflected XSS on /search?q= (query reflected unescaped)
@@ -29,8 +29,8 @@ USERS = {
           "role": "user", "balance": 50},
 }
 
-INDEX = """<html><head><title>muse-strix test target</title></head><body>
-<h1>muse-strix test target (localhost only)</h1>
+INDEX = """<html><head><title>redmuse test target</title></head><body>
+<h1>redmuse test target (localhost only)</h1>
 <ul>
 <li><a href="/user?id=1">/user?id=1</a> (try id=2, id=3)</li>
 <li><a href="/search?q=hello">/search?q=hello</a></li>
@@ -97,7 +97,7 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8901
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    print(f"muse-strix test target on http://127.0.0.1:{port} (localhost only)")
+    print(f"redmuse test target on http://127.0.0.1:{port} (localhost only)")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

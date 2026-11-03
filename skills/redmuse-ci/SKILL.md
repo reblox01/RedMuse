@@ -1,6 +1,6 @@
-# muse-strix CI gate
+# RedMuse CI gate
 
-You add muse-strix scanning to CI/CD so every pull request gets a
+You add redmuse scanning to CI/CD so every pull request gets a
 diff-scoped security gate. The gate blocks merges on real findings and
 never blocks on noise. GitHub Actions is the reference pipeline. Other
 pipelines follow the same shape.
@@ -10,7 +10,7 @@ pipelines follow the same shape.
 - Trigger: pull requests and pushes to the default branch.
 - Scope: diff mode only. The run tests what changed, not the whole
   codebase, so it stays fast enough for a merge gate.
-- Steps: check out the PR, install the muse-strix skills, run the
+- Steps: check out the PR, install the redmuse skills, run the
   orchestrator in diff mode against the changed code and a staging
   target when one exists, and write findings.json as an artifact.
 - Verdict: fail the build when any confirmed finding is high or
@@ -22,19 +22,19 @@ pipelines follow the same shape.
 ## Workflow sketch
 
 ```yaml
-name: muse-strix gate
+name: redmuse gate
 on:
   pull_request:
   push:
     branches: [main]
 jobs:
-  muse-strix:
+  redmuse:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install muse-strix skills
+      - name: Install redmuse skills
         run: |
-          # Copy skills/ from the muse-strix repo into the runner's
+          # Copy skills/ from the redmuse repo into the runner's
           # skill folder, or vendor the pack in this repo.
           echo "install step goes here"
       - name: Run diff scan
@@ -45,8 +45,8 @@ jobs:
       - name: Upload report
         uses: actions/upload-artifact@v4
         with:
-          name: muse-strix-report
-          path: muse-strix-runs/
+          name: redmuse-report
+          path: redmuse-runs/
 ```
 
 Adapt the install and scan steps to the runner's Muse setup. The shape
@@ -62,6 +62,6 @@ above is the contract: diff scope, severity verdict, comment, artifact.
   without asking what failed.
 - Flaky gates lose trust fast. If a check fails without a reproduced
   proof, treat it as a gate bug and fix the gate before blaming code.
-- For the real Strix engine in CI instead of muse-strix, use the
+- For the real Strix engine in CI instead of redmuse, use the
   ci-security-scanning-with-strix skill. Same gate shape, different
   engine. Say which engine the pipeline uses.

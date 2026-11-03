@@ -1,0 +1,5 @@
+name: redmuse-web
+title: RedMuse web exploitation
+description: Black-box OWASP Top 10 testing of a live web target for a redmuse run. Non-destructive payloads only, one working proof of concept per finding.
+category: Work and knowledge
+include_in_prompt: false

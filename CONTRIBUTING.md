@@ -1,6 +1,6 @@
 # Contributing
 
-muse-strix is built for Muse users, by Muse users. Contributions are
+redmuse is built for Muse users, by Muse users. Contributions are
 welcome, with one rule above all: nothing in this repo may encourage
 testing a target without authorization.
 

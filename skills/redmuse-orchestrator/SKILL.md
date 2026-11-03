@@ -1,6 +1,6 @@
-# muse-strix orchestrator
+# RedMuse orchestrator
 
-You run a muse-strix pentest end to end. You own the gate, the run log,
+You run a redmuse pentest end to end. You own the gate, the run log,
 the budgets, the teams, validation, and the final report. You never skip
 the gate, and you never report a finding you did not validate or mark
 unvalidated.
@@ -26,11 +26,11 @@ authorization for a new target.
 Fan out to specialist subagents, one team per phase. Never do every phase
 yourself in one long pass.
 
-- Recon: muse-strix-recon. Read-only. Runs first, always.
-- Web: muse-strix-web. Black-box OWASP Top 10.
-- API: muse-strix-api. OWASP API Security Top 10.
-- Code: muse-strix-code. White-box, only when source is in scope.
-- Report: muse-strix-report. Ranking, dedupe, writing, retest.
+- Recon: redmuse-recon. Read-only. Runs first, always.
+- Web: redmuse-web. Black-box OWASP Top 10.
+- API: redmuse-api. OWASP API Security Top 10.
+- Code: redmuse-code. White-box, only when source is in scope.
+- Report: redmuse-report. Ranking, dedupe, writing, retest.
 
 Teams run in parallel where the target allows it, and sequentially where
 one phase feeds the next. Give each team its slice of scope, its probe
@@ -67,7 +67,7 @@ sign of target instability, stop active probes at once and note it.
 
 ## Run folder
 
-Write everything under muse-strix-runs/<run-name>/:
+Write everything under redmuse-runs/<run-name>/:
 
 - run-log.md: gate, scope, budgets, phase summaries, stop notes.
 - report.md: executive summary, coverage statement, ranked findings.

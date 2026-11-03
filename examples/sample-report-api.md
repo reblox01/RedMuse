@@ -2,7 +2,7 @@
 
 ## Executive summary
 
-A muse-strix API run against the localhost API test target confirmed
+A redmuse API run against the localhost API test target confirmed
 four flaws, all in the OWASP API Security Top 10. An unauthenticated
 caller reads any user, reads internal fields in list responses, creates
 an admin account through mass assignment, and opens the admin stats
@@ -11,7 +11,7 @@ localhost.
 
 ## Scope and coverage
 
-- Target: http://127.0.0.1:8902 (muse-strix API test target)
+- Target: http://127.0.0.1:8902 (redmuse API test target)
 - Scope in: /api/v1/users, /api/v1/users/<id>, /api/v1/admin/stats
 - Scope out: everything else on the machine, all remote hosts
 - Mode: quick

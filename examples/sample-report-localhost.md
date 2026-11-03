@@ -2,7 +2,7 @@
 
 ## Executive summary
 
-A muse-strix quick run against the localhost test target confirmed four
+A redmuse quick run against the localhost test target confirmed four
 real flaws plus one info note. An unauthenticated visitor can read any
 user's profile, including an admin account, through both the web page
 and the API. Search reflects input unescaped, enabling reflected XSS.
@@ -11,7 +11,7 @@ are set. All proofs were reproduced live on localhost.
 
 ## Scope and coverage
 
-- Target: http://127.0.0.1:8901 (muse-strix test target, localhost only)
+- Target: http://127.0.0.1:8901 (redmuse test target, localhost only)
 - Scope in: /, /user, /search, /redirect, /api/users
 - Scope out: everything else on the machine, all remote hosts
 - Mode: quick

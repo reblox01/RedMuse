@@ -2,6 +2,6 @@ __pycache__/
 *.pyc
 .venv/
 node_modules/
-muse-strix-runs/
+redmuse-runs/
 *.log
 .DS_Store

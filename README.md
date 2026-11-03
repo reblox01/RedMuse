@@ -1,4 +1,4 @@
-# muse-strix
+# RedMuse
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Engine: Muse](https://img.shields.io/badge/Engine-Muse-blue.svg)](https://muse.ai)
@@ -21,15 +21,15 @@ IDOR, SSRF, and friends) are credited in `docs/ARCHITECTURE.md`.
 ## Quick start
 
 ```bash
-git clone https://github.com/reblox01/muse-strix.git
-cd muse-strix
+git clone https://github.com/reblox01/redmuse.git
+cd redmuse
 ./scripts/install.sh
 ```
 
 Then, in Muse:
 
 ```text
-Run muse-strix-orchestrator against https://staging.example.com, mode quick.
+Run redmuse-orchestrator against https://staging.example.com, mode quick.
 I own this target and authorize active testing on it.
 ```
 
@@ -40,15 +40,15 @@ phases and writes the report. No active test runs without the gate.
 
 9 skills, one per job:
 
-- muse-strix-orchestrator: the gate, the teams, the budgets, validation
-- muse-strix-recon: attack surface inventory, passive first
-- muse-strix-web: OWASP Top 10, black-box
-- muse-strix-api: OWASP API Security Top 10
-- muse-strix-auth: login, session, JWT, privilege boundaries
-- muse-strix-code: white-box data-flow review
-- muse-strix-report: severity, dedupe, honest coverage, retest
-- muse-strix-fix: root cause patch plus retest loop
-- muse-strix-ci: diff-scoped merge gate for GitHub Actions
+- redmuse-orchestrator: the gate, the teams, the budgets, validation
+- redmuse-recon: attack surface inventory, passive first
+- redmuse-web: OWASP Top 10, black-box
+- redmuse-api: OWASP API Security Top 10
+- redmuse-auth: login, session, JWT, privilege boundaries
+- redmuse-code: white-box data-flow review
+- redmuse-report: severity, dedupe, honest coverage, retest
+- redmuse-fix: root cause patch plus retest loop
+- redmuse-ci: diff-scoped merge gate for GitHub Actions
 
 Plus:
 
@@ -85,7 +85,7 @@ API test target, quick run: 2 high (BOLA, mass assignment), 2 medium
 
 ## How it compares
 
-| | muse-strix | Strix CLI | Strix Cloud | ZAP / Nuclei |
+| | redmuse | Strix CLI | Strix Cloud | ZAP / Nuclei |
 |---|---|---|---|---|
 | Engine | Muse itself | Any LLM via key | Hosted | Signatures |
 | Infra needed | None | Docker | None | Local binary |

@@ -1,0 +1,5 @@
+name: redmuse-ci
+title: RedMuse CI gate
+description: Add redmuse scanning to CI/CD so every pull request gets a diff-scoped security gate that blocks real findings before merge. GitHub Actions first, other pipelines by the same shape.
+category: Work and knowledge
+include_in_prompt: false

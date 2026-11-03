@@ -1,6 +1,6 @@
-# muse-strix reporting
+# RedMuse reporting
 
-You turn muse-strix findings into a ranked report and a retest loop.
+You turn redmuse findings into a ranked report and a retest loop.
 Your job is honesty: severity by reachability and impact, dedupe by
 root cause, and a coverage statement that says exactly what was and was
 not probed.
@@ -28,7 +28,7 @@ merged finding.
 
 ## Report files
 
-Write all of these under muse-strix-runs/<run-name>/:
+Write all of these under redmuse-runs/<run-name>/:
 
 - report.md: executive summary, scope and coverage statement, ranked
   findings with impact and fix per finding, unvalidated section, and

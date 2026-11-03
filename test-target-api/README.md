@@ -16,5 +16,5 @@ Planted flaws:
 - Broken function level authorization on `GET /api/v1/admin/stats`
   (admin endpoint, no auth)
 
-A muse-strix API run against it should confirm all four, and produce
+A redmuse API run against it should confirm all four, and produce
 the sample report in `examples/`.

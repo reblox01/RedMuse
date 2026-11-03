@@ -16,5 +16,5 @@ Planted flaws:
 - API BOLA on `/api/users/<id>` (no auth)
 - Missing security headers (info level)
 
-A muse-strix quick run against it should confirm all four real flaws
+A redmuse quick run against it should confirm all four real flaws
 plus the headers note, and produce the sample report in `examples/`.

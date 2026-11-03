@@ -1,5 +1,0 @@
-name: muse-strix-web
-title: muse-strix web exploitation
-description: Black-box OWASP Top 10 testing of a live web target for a muse-strix run. Non-destructive payloads only, one working proof of concept per finding.
-category: Work and knowledge
-include_in_prompt: false

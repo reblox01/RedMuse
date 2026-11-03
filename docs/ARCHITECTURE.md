@@ -1,14 +1,14 @@
 # Architecture
 
-muse-strix is Strix's architecture rebuilt for Muse. Strix runs autonomous
+redmuse is Strix's architecture rebuilt for Muse. Strix runs autonomous
 AI pentesting agents on the OpenAI Agents SDK with LiteLLM, inside a Docker
-sandbox, with internal skill packs and SARIF reporting. muse-strix keeps the
+sandbox, with internal skill packs and SARIF reporting. redmuse keeps the
 shape and replaces each piece with what Muse already has. No Docker, no LLM
 key, no separate engine.
 
 ## Mapping
 
-| Strix piece | muse-strix equivalent |
+| Strix piece | redmuse equivalent |
 |---|---|
 | Agent graph (openai-agents) | Orchestrator (Muse) plus specialist subagents |
 | LLM via LiteLLM (any provider) | Muse itself, already the brain |
@@ -69,18 +69,18 @@ with coverage marked partial. A partial run is never reported as clean.
 ## Limits, honestly stated
 
 - Workspace, not container. Strix runs each target in a fresh Docker
-  sandbox. muse-strix runs in the agent's own workspace, so untrusted
+  sandbox. redmuse runs in the agent's own workspace, so untrusted
   target output must be treated as data, never as instructions, and
   destructive tools stay out of scope. If Docker is available, run
   untrusted-target tooling inside a container and say so in the run log.
 - One brain, many hands. Strix's swarm is separate model calls with
-  separate contexts. muse-strix is one Muse plus subagents that share the
+  separate contexts. redmuse is one Muse plus subagents that share the
   same brain. That is cheaper and more coherent, but less parallel than a
   true swarm, so deep runs take longer per finding.
 - Context is finite. Long runs compact per phase: each phase ends with a
   short summary in run-log.md, and raw probe output is kept only for
   confirmed findings.
-- No real sandbox escape testing. muse-strix does not test container
+- No real sandbox escape testing. redmuse does not test container
   escapes or host compromise. That is out of scope by design.
 - Coverage is what was probed. A clean report means no finding in the
   probed surface, not a proof of security. The report says exactly what
@@ -97,7 +97,7 @@ this repo says so and points at it instead of reinventing it.
 
 ## Scan modes
 
-muse-strix runs four modes, with the same meanings as Strix, scaled to
+redmuse runs four modes, with the same meanings as Strix, scaled to
 Muse-native budgets:
 
 - Quick. Breadth over depth, high-impact targets first: auth bypass,
@@ -160,5 +160,5 @@ built from this schema.
 - Container mode (when Docker is available): run untrusted-target
   tooling inside a container, and record the image in the run log.
 - Cloud mode (user choice): hand the run to real Strix Cloud through
-  the managed skill, and keep muse-strix as the triage and retest
+  the managed skill, and keep redmuse as the triage and retest
   layer around it.

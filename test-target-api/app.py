@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""muse-strix API test target. INTENTIONALLY VULNERABLE. Localhost only.
+"""redmuse API test target. INTENTIONALLY VULNERABLE. Localhost only.
 
 A tiny fake JSON API (Python standard library only) with four planted
-API flaws so a muse-strix API run can prove itself end to end:
+API flaws so a redmuse API run can prove itself end to end:
 
 - BOLA on GET /api/v1/users/<id> (no auth, any id returns that user)
 - Excessive data exposure on GET /api/v1/users (list returns internal
@@ -90,7 +90,7 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8902
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    print(f"muse-strix API test target on http://127.0.0.1:{port}")
+    print(f"redmuse API test target on http://127.0.0.1:{port}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

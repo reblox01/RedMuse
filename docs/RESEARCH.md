@@ -1,6 +1,6 @@
 # Research
 
-How Strix works, how the wider field works, and what muse-strix takes
+How Strix works, how the wider field works, and what redmuse takes
 from each. All findings below come from the public Strix repository
 and docs, OWASP material, and public scanner docs. No Strix text is
 copied here.
@@ -48,7 +48,7 @@ model can drive it. The moving parts:
 - Diff. Changed code only. Built for pull requests: review the diff,
   test what changed, block the merge on real findings.
 
-muse-strix adopts all four modes with the same meanings, scaled to
+redmuse adopts all four modes with the same meanings, scaled to
 Muse-native budgets.
 
 ## White-box tooling worth knowing
@@ -56,7 +56,7 @@ Muse-native budgets.
 Strix white-box runs lean on a small set of proven tools: semgrep for
 fast static triage, ast-grep or Tree-sitter for structural mapping,
 gitleaks and trufflehog for secrets, trivy for filesystem and
-dependency scans, and CVE lookups for named products. muse-strix treats
+dependency scans, and CVE lookups for named products. redmuse treats
 these as optional tier-two tools: use them when installed, note their
 absence when not, and never let a missing tool silently shrink
 coverage. The report must say which tools ran.
@@ -75,7 +75,7 @@ coverage. The report must say which tools ran.
   leaked keys, open files, headers, DNS. Fast, safe, and shallow by
   design. They complement active testing, they do not replace it.
 
-muse-strix positions itself as the AI pentester for Muse users: agent
+redmuse positions itself as the AI pentester for Muse users: agent
 reasoning plus real proofs, with the engine already in the room.
 
 ## What makes a security tool spread
@@ -95,7 +95,7 @@ Observed from Strix and peers, not promised for this project:
 - Public methodology: named classes, named modes, honest coverage
   statements. Trust spreads faster than hype.
 
-muse-strix builds all eight into v1 and v2: install script, skills for
+redmuse builds all eight into v1 and v2: install script, skills for
 the existing Muse flow, sample reports, CI skill, cloud handoff notes,
 agent-first docs, and honest coverage in every report.
 

@@ -1,0 +1,5 @@
+name: redmuse-code
+title: RedMuse code review
+description: White-box security review of source code for a redmuse run. Data-flow first, authorization model second, secrets and dependencies third. Findings need a live proof to count as confirmed.
+category: Work and knowledge
+include_in_prompt: false

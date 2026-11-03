@@ -1,5 +1,0 @@
-name: muse-strix-ci
-title: muse-strix CI gate
-description: Add muse-strix scanning to CI/CD so every pull request gets a diff-scoped security gate that blocks real findings before merge. GitHub Actions first, other pipelines by the same shape.
-category: Work and knowledge
-include_in_prompt: false

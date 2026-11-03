@@ -1,0 +1,5 @@
+name: redmuse-orchestrator
+title: RedMuse orchestrator
+description: Run a redmuse pentest end to end. Owns the authorization gate, the run log, the budgets, the specialist teams, validation, and the final report. Invoke first for any redmuse run.
+category: Work and knowledge
+include_in_prompt: false

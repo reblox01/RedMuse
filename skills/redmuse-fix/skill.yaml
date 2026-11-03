@@ -1,0 +1,5 @@
+name: redmuse-fix
+title: RedMuse fix and retest
+description: Fix redmuse findings at the root cause and prove each fix with a retest. Triage by severity, patch the cause not the symptom, re-run only the affected proofs.
+category: Work and knowledge
+include_in_prompt: false

@@ -1,0 +1,5 @@
+name: redmuse-api
+title: RedMuse API exploitation
+description: OWASP API Security Top 10 testing of REST, GraphQL, or gRPC APIs for a redmuse run. Endpoint enumeration first, then authorization and injection classes, one proof of concept per finding.
+category: Work and knowledge
+include_in_prompt: false

@@ -1,5 +1,0 @@
-name: muse-strix-code
-title: muse-strix code review
-description: White-box security review of source code for a muse-strix run. Data-flow first, authorization model second, secrets and dependencies third. Findings need a live proof to count as confirmed.
-category: Work and knowledge
-include_in_prompt: false

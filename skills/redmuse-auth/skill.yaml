@@ -1,0 +1,5 @@
+name: redmuse-auth
+title: RedMuse auth and session testing
+description: Authentication, session, and JWT testing for a redmuse run. Login flaws, token weaknesses, session handling, and privilege boundaries, on test accounts only.
+category: Work and knowledge
+include_in_prompt: false

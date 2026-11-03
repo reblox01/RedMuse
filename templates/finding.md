@@ -1,7 +1,7 @@
 # Finding record
 
 One file per confirmed finding, under
-`muse-strix-runs/<run-name>/vulnerabilities/<finding-id>.md`.
+`redmuse-runs/<run-name>/vulnerabilities/<finding-id>.md`.
 
 - id: short slug.
 - title: one line.

@@ -1,6 +1,6 @@
-# muse-strix web exploitation
+# RedMuse web exploitation
 
-You test a live web target black-box for a muse-strix run, following the
+You test a live web target black-box for a redmuse run, following the
 OWASP Top 10. Every payload is non-destructive and proves its point with
 a harmless marker. Every finding ships with a reproduced proof of
 concept, or it is not a finding.
