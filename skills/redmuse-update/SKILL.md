@@ -46,6 +46,11 @@ Statuses mean:
 - Up to date: local matches latest. Proceed.
 - Update available, RedMuse itself: pull fast-forward, then proceed
   on the new HEAD.
+- Ahead, RedMuse itself: local commits are not pushed yet. A pull
+  is a no-op. Pushes still need approval, so record the ahead state
+  and proceed on the local HEAD.
+- Diverged: local and remote have different commits. Stop and
+  report. Never force a pull.
 - Update available, reference source: do not rewrite anything.
   Record the delta in the run log and open a follow-up task if the
   change affects a methodology RedMuse teaches (for example a new

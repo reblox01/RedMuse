@@ -9,16 +9,26 @@
 
 ROOT="${1:-$(cd "$(dirname "$0")/.." && pwd)}"
 
-# RedMuse itself: local HEAD vs origin HEAD.
+# RedMuse itself: local HEAD vs origin/main HEAD. A fetch is
+# read-only for the working tree; it only refreshes remote refs so
+# behind, ahead, and diverged can be told apart.
 if git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1; then
   LOCAL=$(git -C "$ROOT" rev-parse HEAD 2>/dev/null || echo unknown)
-  REMOTE=$(git ls-remote https://github.com/reblox01/RedMuse.git HEAD 2>/dev/null | awk '{print $1}')
-  if [ -z "$REMOTE" ]; then
+  if git -C "$ROOT" fetch -q origin 2>/dev/null; then
+    REMOTE=$(git -C "$ROOT" rev-parse origin/main 2>/dev/null || echo unknown)
+  else
+    REMOTE=$(git ls-remote https://github.com/reblox01/RedMuse.git HEAD 2>/dev/null | awk '{print $1}')
+  fi
+  if [ -z "$REMOTE" ] || [ "$REMOTE" = unknown ]; then
     echo "redmuse | $LOCAL | unknown | unreachable"
   elif [ "$LOCAL" = "$REMOTE" ]; then
     echo "redmuse | $LOCAL | $REMOTE | up-to-date"
-  else
+  elif git -C "$ROOT" merge-base --is-ancestor "$LOCAL" "$REMOTE" 2>/dev/null; then
     echo "redmuse | $LOCAL | $REMOTE | update-available"
+  elif git -C "$ROOT" merge-base --is-ancestor "$REMOTE" "$LOCAL" 2>/dev/null; then
+    echo "redmuse | $LOCAL | $REMOTE | ahead (unpushed commits, pull is a no-op)"
+  else
+    echo "redmuse | $LOCAL | $REMOTE | diverged (stop, do not force)"
   fi
 else
   echo "redmuse | unknown | unknown | skipped (not a git checkout)"
