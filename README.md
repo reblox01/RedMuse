@@ -20,7 +20,7 @@ Inspired by the architecture of [Strix](https://github.com/usestrix/strix)
 rebuilt from scratch as skills and playbooks that anyone with Muse.ai can
 install and run. Skill content here is original writing. Strix itself
 is Apache-2.0, and its methodology topics (OWASP Top 10, API Top 10,
-IDOR, SSRF, and friends) are credited in `docs/ARCHITECTURE.md`.
+IDOR, SSRF, and friends) are credited in [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## Quick start
 
@@ -69,13 +69,13 @@ cd redmuse
 ./scripts/install.sh
 ```
 
-Then invoke redmuse-orchestrator with the same target, scope,
+Then invoke [redmuse-orchestrator](skills/redmuse-orchestrator/SKILL.md) with the same target, scope,
 and authorization as above.
 
 ## Releases
 
 Tagged versions (v1.0.0, ...) ship a zip of the skill pack on
-the Releases page, built by .github/workflows/release.yml. The
+[the Releases page](https://github.com/reblox01/RedMuse/releases), built by [.github/workflows/release.yml](.github/workflows/release.yml). The
 zip holds skills, docs, templates, tools, scripts, and examples.
 The test targets are not in the zip; they stay in the repo for
 demos only. To install a pinned version, ask Muse to install
@@ -88,11 +88,11 @@ https://github.com/reblox01/RedMuse.
 
 The phase 0 update check tracks git HEAD, so a pinned install
 stays pinned until you ask Muse to install a newer tag. CI runs
-on every push to main (.github/workflows/ci.yml): skill files
+on every push to main ([.github/workflows/ci.yml](.github/workflows/ci.yml)): skill files
 present, sources.yaml valid and covering every skill, report
 renderer smoke test, and the update check as an informational
 step. The release workflow runs when a v* tag exists, and tags
-are automatic: .github/workflows/auto-tag.yml watches every
+are automatic: [.github/workflows/auto-tag.yml](.github/workflows/auto-tag.yml) watches every
 push to main except workflow, README, and LICENSE changes,
 so any push that edits anything else creates the next patch
 tag (first tag v0.1.0), which then triggers the release. Put
@@ -104,36 +104,36 @@ Pushing a v* tag by hand still works.
 
 13 skills, one per job:
 
-- redmuse-orchestrator: the gate, the teams, the budgets, validation
-- redmuse-recon: attack surface inventory, passive first
-- redmuse-cve-intel: CVE intel from fingerprints, before any exploit team
-- redmuse-web: OWASP Top 10, black-box
-- redmuse-api: OWASP API Security Top 10
-- redmuse-auth: login, session, JWT, privilege boundaries
-- redmuse-code: white-box data-flow review
-- redmuse-report: severity, dedupe, honest coverage, retest
-- redmuse-fix: root cause patch plus retest loop
-- redmuse-ci: diff-scoped merge gate for GitHub Actions
-- redmuse-dev-audit: dev audit, code chained to live proof on dev and staging
-- redmuse-update: pre-run update check, auto-pull for RedMuse itself, flags for reference sources
-- redmuse-mcp: optional MCP layer, set up in phase 0.5. MCPs stay full power, RedMuse governs the call, no-key tools first, keyed tools with a step-by-step walkthrough, declined or unavailable means not run, never clean
+- [redmuse-orchestrator](skills/redmuse-orchestrator/SKILL.md): the gate, the teams, the budgets, validation
+- [redmuse-recon](skills/redmuse-recon/SKILL.md): attack surface inventory, passive first
+- [redmuse-cve-intel](skills/redmuse-cve-intel/SKILL.md): CVE intel from fingerprints, before any exploit team
+- [redmuse-web](skills/redmuse-web/SKILL.md): OWASP Top 10, black-box
+- [redmuse-api](skills/redmuse-api/SKILL.md): OWASP API Security Top 10
+- [redmuse-auth](skills/redmuse-auth/SKILL.md): login, session, JWT, privilege boundaries
+- [redmuse-code](skills/redmuse-code/SKILL.md): white-box data-flow review
+- [redmuse-report](skills/redmuse-report/SKILL.md): severity, dedupe, honest coverage, retest
+- [redmuse-fix](skills/redmuse-fix/SKILL.md): root cause patch plus retest loop
+- [redmuse-ci](skills/redmuse-ci/SKILL.md): diff-scoped merge gate for GitHub Actions
+- [redmuse-dev-audit](skills/redmuse-dev-audit/SKILL.md): dev audit, code chained to live proof on dev and staging
+- [redmuse-update](skills/redmuse-update/SKILL.md): pre-run update check, auto-pull for RedMuse itself, flags for reference sources
+- [redmuse-mcp](skills/redmuse-mcp/SKILL.md): optional MCP layer, set up in phase 0.5. MCPs stay full power, RedMuse governs the call, no-key tools first, keyed tools with a step-by-step walkthrough, declined or unavailable means not run, never clean
 
 Plus:
 
-- `docs/RESEARCH.md`: Strix deep dive, scan modes, field landscape,
+- [`docs/RESEARCH.md`](docs/RESEARCH.md): Strix deep dive, scan modes, field landscape,
   what makes a security tool spread
-- `docs/ARCHITECTURE.md`: Strix-to-Muse mapping, scan modes, team
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md): Strix-to-Muse mapping, scan modes, team
   protocols, tool tiers, report schema, sandbox modes
-- `docs/MCPs.md`: optional MCP layer, full-power MCPs governed by RedMuse
-- `docs/SAFETY.md`: the authorization gate and the rules that are part
+- [`docs/MCPs.md`](docs/MCPs.md): optional MCP layer, full-power MCPs governed by RedMuse
+- [`docs/SAFETY.md`](docs/SAFETY.md): the authorization gate and the rules that are part
   of the tool
-- `templates/`: finding, report, and run log templates
-- `tools/render_report.py`: findings.json to standalone HTML report
-- `tools/cve_lookup.py`: fingerprint list to CVE shortlist, OSV for
+- [`templates/`](templates/): finding, report, and run log templates
+- [`tools/render_report.py`](tools/render_report.py): findings.json to standalone HTML report
+- [`tools/cve_lookup.py`](tools/cve_lookup.py): fingerprint list to CVE shortlist, OSV for
   packages, NVD candidates for runtimes, standard library only
-- `test-target/` and `test-target-api/`: intentionally vulnerable
+- [`test-target/`](test-target/) and [`test-target-api/`](test-target-api/): intentionally vulnerable
   localhost apps, fake data only, never deploy them publicly
-- `examples/`: real sample reports from localhost runs, plus a worked MCP setup record
+- [`examples/`](examples/): real sample reports from localhost runs, plus a worked MCP setup record
 
 ## Scan modes
 
@@ -146,7 +146,7 @@ Plus:
 
 ## Dev-audit mode
 
-For your own code in dev: code audit chained to live exploit proofs on localhost or staging, plus a Cloudflare edge checklist and Securly AI and agent layers when the target is an AI app. Dev does not waive the gate: target, scope, and authorization are still recorded first. See `skills/redmuse-dev-audit/SKILL.md` and `examples/sample-dev-audit.md`.
+For your own code in dev: code audit chained to live exploit proofs on localhost or staging, plus a Cloudflare edge checklist and Securly AI and agent layers when the target is an AI app. Dev does not waive the gate: target, scope, and authorization are still recorded first. See [`skills/redmuse-dev-audit/SKILL.md`](skills/redmuse-dev-audit/SKILL.md) and [`examples/sample-dev-audit.md`](examples/sample-dev-audit.md).
 
 ## CVE intel
 
@@ -155,8 +155,8 @@ versions actually running, query live CVE data, and build a probe
 plan from the shortlist. Patched versions get no probe,
 unknown versions get no exploit attempt, and remote code execution
 gets version evidence only on live targets. See
-`skills/redmuse-cve-intel/SKILL.md` and
-`examples/sample-cve-intel.md`.
+[`skills/redmuse-cve-intel/SKILL.md`](skills/redmuse-cve-intel/SKILL.md) and
+[`examples/sample-cve-intel.md`](examples/sample-cve-intel.md).
 
 ## MCP layer
 
@@ -184,20 +184,20 @@ Starter set, and what each one feeds:
 
 Every offer states hosted or local, because local MCPs do not work
 from a Muse.ai session, only on the user's own machine. See
-`skills/redmuse-mcp/SKILL.md`, `docs/MCPs.md`, and the worked
-setup in `examples/sample-mcp-setup.md`.
+[`skills/redmuse-mcp/SKILL.md`](skills/redmuse-mcp/SKILL.md), [`docs/MCPs.md`](docs/MCPs.md), and the worked
+setup in [`examples/sample-mcp-setup.md`](examples/sample-mcp-setup.md).
 
 ## Staying current
 
-Every run starts with a phase 0 update check (redmuse-update, script
-tools/check_updates.py, sources in skills/redmuse-update/sources.yaml).
+Every run starts with a phase 0 update check ([redmuse-update](skills/redmuse-update/SKILL.md), script
+[tools/check_updates.py](tools/check_updates.py), sources in [skills/redmuse-update/sources.yaml](skills/redmuse-update/sources.yaml)).
 RedMuse itself auto-pulls on a fast-forward
 only, before any target work. Strix, Securly, Cloudflare, Sentry, OWASP, Masriyan, Trail of Bits,
 OpenAI, ClawSec, Varlock, REA, and SquirrelScan are reference sources, not vendored code, so their changes
 are flagged
 as follow-up tasks instead of silently rewriting skill content.
 Nothing updates mid-run and nothing pushes automatically. Sources
-and their check rules live in docs/SOURCES.md.
+and their check rules live in [docs/SOURCES.md](docs/SOURCES.md).
 
 ## Ensemble scoring
 
@@ -209,19 +209,19 @@ path, and extra confirming skills, total 0 to 5, banded as
 corroborated, confirmed, weak, or unvalidated. The report also
 carries a coverage matrix, flags single-coverage classes, and
 lists unprobed classes as gaps, never as clean. See
-examples/sample-ensemble.md.
+[examples/sample-ensemble.md](examples/sample-ensemble.md).
 
 ## Proven on localhost
 
 Web test target, quick run: 2 high (IDOR, API BOLA), 1 medium
 (reflected XSS), 1 low (open redirect), 1 info (missing headers). All
-reproduced live. See `examples/sample-report-localhost.md`.
+reproduced live. See [`examples/sample-report-localhost.md`](examples/sample-report-localhost.md).
 
 API test target, quick run: 2 high (BOLA, mass assignment), 2 medium
 (admin bypass, excessive data exposure). All reproduced live. See
-`examples/sample-report-api.md`.
+[`examples/sample-report-api.md`](examples/sample-report-api.md).
 
-Dev-audit demo: code location plus live proof for the web target IDOR, XSS, and redirect flaws. See `examples/sample-dev-audit.md`.
+Dev-audit demo: code location plus live proof for the web target IDOR, XSS, and redirect flaws. See [`examples/sample-dev-audit.md`](examples/sample-dev-audit.md).
 
 ## Proven live (anonymized)
 
@@ -231,7 +231,7 @@ domains or repo names are listed. Totals: 0 critical, 2 high, 4 medium,
 8 low, 14 info across the 5 runs, plus one major question left honestly
 unvalidated (a PHP runtime version question that could not be answered
 from outside and was not exploited). See
-`examples/live-runs-anonymized.md` for the per-run tables, what was
+[`examples/live-runs-anonymized.md`](examples/live-runs-anonymized.md) for the per-run tables, what was
 found, what was checked clean, and what was left as gaps.
 
 ## How it compares
@@ -252,7 +252,7 @@ and was not probed.
 
 ## Safety
 
-Read `docs/SAFETY.md` before your first run. The short version: only
+Read [`docs/SAFETY.md`](docs/SAFETY.md) before your first run. The short version: only
 test targets you own or are authorized to test, passive first, active
 probes only after the authorization gate, non-destructive payloads
 only, test accounts only, secrets masked in every report.
@@ -266,9 +266,9 @@ only, test accounts only, secrets masked in every report.
 
 ## Contributing
 
-See `CONTRIBUTING.md`. One skill per pull request, tested against the
+See [`CONTRIBUTING.md`](CONTRIBUTING.md). One skill per pull request, tested against the
 localhost targets, no live targets in tests.
 
 ## License
 
-MIT. See `LICENSE`.
+MIT. See [`LICENSE`](LICENSE).
