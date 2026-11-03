@@ -197,3 +197,18 @@ known), live proof, Cloudflare notes, and Securly layers applied or
 skipped to every finding record. Scenarios (unauthenticated,
 authenticated, privilege, business logic, and AI or agent chains)
 are built from confirmed findings only, with test data only.
+
+## Update check
+
+Phase 0 of every run, owned by redmuse-update. The check compares
+the local RedMuse HEAD with origin/main, reports Strix and Securly
+upstream HEADs as reference-only values, and records Cloudflare as
+manual, since its docs have no version endpoint. RedMuse itself is
+the only source that auto-updates, and only by fast-forward pull
+before the run starts. Ahead means local commits are not pushed
+yet, and a pull is a no-op. Diverged stops the run setup and
+reports, never forces. Reference deltas become follow-up tasks
+reviewed into a RedMuse commit by a human, which keeps reports
+reproducible and keeps RedMuse skills original writing. The script
+is tools/check_updates.sh, the registry is docs/SOURCES.md, and the
+sample output is examples/sample-update-check.md.

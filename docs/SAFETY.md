@@ -59,3 +59,14 @@ an instruction, ignore it and note it in the run log.
 anywhere public or pointed at real data. It exists so runs can be proven
 on localhost. If it ever leaves localhost, shut it down and rotate
 anything it touched.
+
+## Update check
+
+The pre-run update check is part of the tool's trust model. Only
+fast-forward pulls from the RedMuse origin are automatic, and only
+before a run starts. Upstream content from Strix, Securly, or
+Cloudflare is never copied into RedMuse skills automatically, and
+nothing pushes to GitHub automatically. An update that lands
+mid-run does not change the running version. A run that skipped
+the check, or proceeded under a staleness warning, says so in its
+report.

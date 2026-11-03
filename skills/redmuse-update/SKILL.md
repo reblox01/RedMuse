@@ -51,6 +51,9 @@ Statuses mean:
   and proceed on the local HEAD.
 - Diverged: local and remote have different commits. Stop and
   report. Never force a pull.
+- Unknown-relation: the fetch failed, so behind and ahead cannot
+  be told apart. Record it, warn, and pull manually. Strict mode
+  stops here instead of warning.
 - Update available, reference source: do not rewrite anything.
   Record the delta in the run log and open a follow-up task if the
   change affects a methodology RedMuse teaches (for example a new

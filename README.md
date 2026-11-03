@@ -42,7 +42,7 @@ phases and writes the report. No active test runs without the gate.
 
 ## What is inside
 
-10 skills, one per job:
+11 skills, one per job:
 
 - redmuse-orchestrator: the gate, the teams, the budgets, validation
 - redmuse-recon: attack surface inventory, passive first
@@ -54,6 +54,7 @@ phases and writes the report. No active test runs without the gate.
 - redmuse-fix: root cause patch plus retest loop
 - redmuse-ci: diff-scoped merge gate for GitHub Actions
 - redmuse-dev-audit: dev audit, code chained to live proof on dev and staging
+- redmuse-update: pre-run update check, auto-pull for RedMuse itself, flags for reference sources
 
 Plus:
 
@@ -81,6 +82,16 @@ Plus:
 ## Dev-audit mode
 
 For your own code in dev: code audit chained to live exploit proofs on localhost or staging, plus a Cloudflare edge checklist and Securly AI and agent layers when the target is an AI app. Dev does not waive the gate: target, scope, and authorization are still recorded first. See `skills/redmuse-dev-audit/SKILL.md` and `examples/sample-dev-audit.md`.
+
+## Staying current
+
+Every run starts with a phase 0 update check (redmuse-update, script
+tools/check_updates.sh). RedMuse itself auto-pulls on a fast-forward
+only, before any target work. Strix, Securly, and Cloudflare are
+reference sources, not vendored code, so their changes are flagged
+as follow-up tasks instead of silently rewriting skill content.
+Nothing updates mid-run and nothing pushes automatically. Sources
+and their check rules live in docs/SOURCES.md.
 
 ## Proven on localhost
 

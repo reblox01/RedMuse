@@ -21,6 +21,18 @@ If any input is missing, stop and ask. A general statement is not
 authorization for a specific target. A past authorization is not
 authorization for a new target.
 
+## Phase 0: update check
+
+Before the gate, run redmuse-update. The check runs once, before
+any target work, and its result goes in the run log: RedMuse HEAD
+before and after any fast-forward pull, plus one status line per
+source in docs/SOURCES.md. RedMuse itself auto-pulls on a
+fast-forward only. Reference sources never rewrite skill content;
+a methodology delta becomes a follow-up task. Nothing updates
+mid-run, and nothing pushes automatically. A run that skipped the
+check, or proceeded under a staleness warning, says so in its
+report.
+
 ## Teams
 
 Fan out to specialist subagents, one team per phase. Never do every phase
