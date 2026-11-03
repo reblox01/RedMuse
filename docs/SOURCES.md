@@ -1,5 +1,9 @@
 # Sources RedMuse tracks
 
+Machine-readable registry: skills/redmuse-update/sources.yaml.
+That file is authoritative for the update check script; this doc
+explains the same sources in prose.
+
 RedMuse is a skill pack with original writing. It does not vendor
 Strix, Securly, or Cloudflare skills, and it never copies their
 content. This registry exists so the pre-run update check in

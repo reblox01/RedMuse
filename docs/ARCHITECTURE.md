@@ -210,5 +210,7 @@ yet, and a pull is a no-op. Diverged stops the run setup and
 reports, never forces. Reference deltas become follow-up tasks
 reviewed into a RedMuse commit by a human, which keeps reports
 reproducible and keeps RedMuse skills original writing. The script
-is tools/check_updates.sh, the registry is docs/SOURCES.md, and the
-sample output is examples/sample-update-check.md.
+is tools/check_updates.py, the machine-readable registry is
+skills/redmuse-update/sources.yaml, and docs/SOURCES.md is the
+human-readable companion. The sample output is
+examples/sample-update-check.md.

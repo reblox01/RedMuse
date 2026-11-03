@@ -86,7 +86,8 @@ For your own code in dev: code audit chained to live exploit proofs on localhost
 ## Staying current
 
 Every run starts with a phase 0 update check (redmuse-update, script
-tools/check_updates.sh). RedMuse itself auto-pulls on a fast-forward
+tools/check_updates.py, sources in skills/redmuse-update/sources.yaml).
+RedMuse itself auto-pulls on a fast-forward
 only, before any target work. Strix, Securly, and Cloudflare are
 reference sources, not vendored code, so their changes are flagged
 as follow-up tasks instead of silently rewriting skill content.

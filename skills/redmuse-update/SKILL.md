@@ -32,8 +32,14 @@ Not auto, by design:
 
 ## The check
 
-Run tools/check_updates.sh from the RedMuse repo, or do the same
-steps by hand. For each source in docs/SOURCES.md, record:
+Run tools/check_updates.py from the RedMuse repo, or do the same
+steps by hand. The script reads its sources from
+skills/redmuse-update/sources.yaml, which is the single source of
+truth: every skill maps to a source through the covers list, so to
+find where a skill comes from, look up its name there. Adding a
+source to that file is enough to have it checked, with no script
+edit needed. docs/SOURCES.md is the human-readable companion to
+that config. For each source, record:
 
 - Name and source URL.
 - Local version: the commit or release the run is actually using.
@@ -67,6 +73,9 @@ Statuses mean:
   a version number, and never as clean.
 
 ## Source rules
+
+The authoritative list lives in sources.yaml next to this skill;
+the entries below explain the policy per kind.
 
 - RedMuse: git origin, auto-pull fast-forward only.
 - Strix: methodology reference only, not vendored, not copied.
