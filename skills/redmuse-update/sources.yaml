@@ -15,6 +15,8 @@
 #   check: git-head (compare upstream HEAD) or manual.
 #   auto_update: fast-forward-pull (RedMuse itself only) or none.
 #     none means a delta becomes a follow-up task, never a rewrite.
+#   cli: command-line tools the skills use, or none. Recorded so the
+#     run machine can check availability; never auto-installed.
 sources:
   - name: redmuse
     covers:
@@ -49,7 +51,62 @@ sources:
     auto_update: none
   - name: cloudflare
     covers:
+      - security-audit
       - dev-audit-edge-checklist
-    kind: manual
-    check: manual
+    repo: https://github.com/cloudflare/security-audit-skill.git
+    kind: reference
+    check: git-head
     auto_update: none
+    cli: none
+  - name: sentry
+    covers:
+      - security-review
+      - gha-security-review
+      - security-model
+    repo: https://github.com/getsentry/skills.git
+    kind: reference
+    check: git-head
+    auto_update: none
+    cli: none
+  - name: owasp
+    covers:
+      - owasp-security
+    repo: https://github.com/agamm/claude-code-owasp.git
+    kind: reference
+    check: git-head
+    auto_update: none
+    cli: none
+  - name: masriyan
+    covers:
+      - 01-recon-osint
+      - 02-vulnerability-scanner
+      - 08-network-security
+      - 09-web-security
+      - 16-ai-llm-security
+    repo: https://github.com/Masriyan/Claude-Code-CyberSecurity-Skill.git
+    kind: reference
+    check: git-head
+    auto_update: none
+    cli: nmap, nuclei, trivy, zap, sqlmap, tshark, suricata, snort, zeek, plus skill scripts (Python 3.10+, full plugin checkout)
+  - name: trailofbits
+    covers:
+      - semgrep
+      - codeql
+      - sarif-parsing
+      - differential-review
+      - variant-analysis
+    repo: https://github.com/trailofbits/skills.git
+    kind: reference
+    check: git-head
+    auto_update: none
+    cli: semgrep, codeql
+  - name: openai
+    covers:
+      - threat-model
+      - security-diff-scan
+      - validation
+    repo: https://github.com/openai/codex-security.git
+    kind: reference
+    check: git-head
+    auto_update: none
+    cli: none

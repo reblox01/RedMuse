@@ -63,8 +63,11 @@ the live behavior and note the gap.
 
 ## Phase 3: Cloudflare edge checklist
 
-This checklist is original RedMuse writing. There is no bundled
-Cloudflare skill in the pack, so do not claim one ran. Check what is
+This checklist is original RedMuse writing. RedMuse does not bundle
+a Cloudflare skill, but an upstream one exists
+(cloudflare/security-audit-skill, tracked in sources.yaml). When it
+is installed, use it as an additional layer; when it is not, run
+the checklist below and do not claim the skill ran. Check what is
 observable on the dev or staging domain, and mark the rest not
 probed:
 
@@ -110,6 +113,28 @@ symptom, prefer framework features over hand-rolled checks, and
 re-run only the affected proofs. Update each finding status to
 fixed, still open, or changed, with the retest request and response
 attached.
+
+## Optional external layers
+
+Reference only, use when installed, never bundled, never copied.
+Look each skill up in sources.yaml for its source repo and CLI.
+
+- Cloudflare security-audit: defensive source-first audit workflow.
+- OWASP owasp-security: Top 10:2025, ASVS 5.0, LLM and Agentic
+  Top 10 checklists for code review.
+- Sentry security-review and gha-security-review: high-confidence
+  code review and GitHub Actions workflow exploitation review.
+- Masriyan recon, vulnerability-scanner, web-security,
+  network-security, ai-llm-security: phase-matched methods plus
+  their CLIs when those CLIs are installed on the run machine.
+- Trail of Bits semgrep, codeql, sarif-parsing,
+  differential-review, variant-analysis: static analysis and diff
+  review, needs the semgrep or codeql CLI installed.
+- OpenAI threat-model, security-diff-scan, validation: scoping,
+  diff review, and evidence-based finding validation.
+
+If an external skill or its CLI is missing on the run machine,
+skip that layer and record it as skipped, never as clean.
 
 ## Output
 

@@ -201,9 +201,8 @@ are built from confirmed findings only, with test data only.
 ## Update check
 
 Phase 0 of every run, owned by redmuse-update. The check compares
-the local RedMuse HEAD with origin/main, reports Strix and Securly
-upstream HEADs as reference-only values, and records Cloudflare as
-manual, since its docs have no version endpoint. RedMuse itself is
+the local RedMuse HEAD with origin/main and reports every
+reference source's upstream HEAD as a reference-only value. RedMuse itself is
 the only source that auto-updates, and only by fast-forward pull
 before the run starts. Ahead means local commits are not pushed
 yet, and a pull is a no-op. Diverged stops the run setup and

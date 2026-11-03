@@ -84,9 +84,10 @@ the entries below explain the policy per kind.
   in RedMuse. If the user has Securly installed, check its upstream
   HEAD against the installed copy and record both. RedMuse never
   updates the user's Securly install for them.
-- Cloudflare: no bundled skill, no version endpoint. The edge
-  checklist is original RedMuse writing. Review Cloudflare docs on
-  major changes by hand and record the review date.
+- Cloudflare: upstream skill repo tracked in sources.yaml,
+  reference only, not bundled. The edge checklist is original
+  RedMuse writing; use the upstream skill as an additional layer
+  when installed.
 
 ## Output
 
