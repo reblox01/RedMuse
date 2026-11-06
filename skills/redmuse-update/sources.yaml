@@ -30,6 +30,8 @@ sources:
       - redmuse-report
       - redmuse-fix
       - redmuse-verify
+      - redmuse-bizlogic
+      - redmuse-exploit
       - redmuse-ci
       - redmuse-dev-audit
       - redmuse-update

@@ -1,0 +1,5 @@
+name: redmuse-bizlogic
+title: RedMuse business logic testing
+description: Tests what an application is supposed to do, not what its code looks like. Price, payment, workflow order, limits, roles, and state, broken with the application's own features using test accounts and test data only. Scanners miss these bugs.
+category: Work and knowledge
+include_in_prompt: false

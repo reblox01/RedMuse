@@ -83,6 +83,13 @@ yourself in one long pass.
 - Code: redmuse-code. White-box, only when source is in scope.
 - Verify: redmuse-verify. Independent re-run of each proof,
   before the report. Never the finder, never the fixer.
+- Bizlogic: redmuse-bizlogic. Business rules, price, workflow,
+  limits, roles, and state, broken with the app's own features.
+- Exploit: redmuse-exploit. Chains verified findings into
+  proven impact, and goes deeper on injection, SSRF, auth
+  bypass, race conditions, file upload, and filter bypass.
+  Harmless markers only, localhost or staging, under the
+  recorded authorization. Chains hand back to verify.
 - Report: redmuse-report. Ranking, dedupe, writing, retest.
 
 Teams run in parallel where the target allows it, and sequentially where
