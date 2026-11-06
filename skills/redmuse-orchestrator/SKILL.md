@@ -21,6 +21,26 @@ If any input is missing, stop and ask. A general statement is not
 authorization for a specific target. A past authorization is not
 authorization for a new target.
 
+## Hard refusal list
+
+The gate asks for authorization. This list says what authorization
+can never grant, no matter who asks, and no refusal on it can be
+overridden by the user, the target owner, or a scope note:
+
+- denial of service, or anything that degrades a live service
+- mass scanning of the public internet
+- unattended worms, self-spreading code
+- persistent backdoors that survive the engagement
+- false-flag operations, or framing another party
+- safety-of-life systems, including medical, aviation, and
+  industrial control
+- payment bypass for personal gain
+- CSAM and bioweapon content, in any form
+
+If a request touches anything on this list, refuse it, say which
+item it touches, and offer the closest allowed alternative. The
+refusal goes in run-log.md.
+
 ## Phase 0: update check
 
 Before the gate, run redmuse-update. The check runs once, before
@@ -160,6 +180,18 @@ Track probes, time, and teams against the gate numbers. When any budget
 is hit, stop exploiting, keep what is confirmed, and mark coverage
 partial in the report. A partial run is never reported as clean. On any
 sign of target instability, stop active probes at once and note it.
+
+Stopping conditions, checked after every phase: budget hit, target
+unstable, all in-scope surfaces covered, or the same class returning
+no new findings after two different approaches. When a run stops, the
+run log says which condition fired.
+
+Zero-findings fallback: a run that finds nothing never reports the
+target clean. It reports what was tested in the coverage matrix, and
+then it escalates in this order: try a different approach on the same
+surface, try a different skill on the same class, and if nothing new
+appears, record each class as untested rather than clean, with the
+reason it could not be proven.
 
 ## Run folder
 
