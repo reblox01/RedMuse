@@ -1,0 +1,5 @@
+name: redmuse-lab-cloud
+title: RedMuse lab cloud security
+description: Tests AWS, Azure, or GCP misconfiguration and IAM privilege escalation in a dedicated test cloud account with written scope. Configuration checks first, then a replayable escalation path from a low-privilege test role, with proof capsules and honest coverage. Never runs on production.
+category: Work and knowledge
+include_in_prompt: false

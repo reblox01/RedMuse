@@ -36,6 +36,16 @@ sources:
       - redmuse-threat-model
       - redmuse-crypto
       - redmuse-findings
+      - redmuse-lab-traffic
+      - redmuse-lab-network
+      - redmuse-lab-container
+      - redmuse-lab-privesc
+      - redmuse-lab-reverse
+      - redmuse-lab-cloud
+      - redmuse-lab-mobile
+      - redmuse-lab-forensics
+      - redmuse-lab-malware
+      - redmuse-lab-detection
       - redmuse-ci
       - redmuse-dev-audit
       - redmuse-update

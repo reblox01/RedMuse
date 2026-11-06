@@ -1,0 +1,5 @@
+name: redmuse-lab-network
+title: RedMuse lab network attacker
+description: Layer 2 and 3 testing in a lab network only. Maps hosts, ports, and services, then tests one service at a time for name resolution poisoning, ARP spoofing, and unauthenticated services, with harmless markers and no takeover. Never runs on production, shared office, or public networks.
+category: Work and knowledge
+include_in_prompt: false

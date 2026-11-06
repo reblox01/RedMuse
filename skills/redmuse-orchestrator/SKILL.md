@@ -101,6 +101,14 @@ yourself in one long pass.
   and IV reuse, randomness, password storage, TLS, and JWT.
 - Findings: redmuse-findings. The SQLite store, queryable
   by severity, CWE, and status, with export and handoff.
+- Lab tier, opt-in only: redmuse-lab-traffic, redmuse-lab-network,
+  redmuse-lab-container, redmuse-lab-privesc, redmuse-lab-reverse,
+  redmuse-lab-cloud, redmuse-lab-mobile, redmuse-lab-forensics,
+  redmuse-lab-malware, redmuse-lab-detection. Each needs a Kali
+  box or Docker on a machine the user controls, lab only, with
+  the stricter lab gate from docs/LAB-TIER.md. A run with no lab
+  records lab classes as not run, never as clean. Lab findings
+  go through the same finding record, verify, and report.
 - Report: redmuse-report. Ranking, dedupe, writing, retest.
 
 Teams run in parallel where the target allows it, and sequentially where

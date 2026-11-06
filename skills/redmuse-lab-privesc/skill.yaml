@@ -1,0 +1,5 @@
+name: redmuse-lab-privesc
+title: RedMuse lab privilege escalation
+description: Linux and Windows privilege escalation in a lab VM only, after a foothold already granted. Enumerates SUID binaries, writable system paths, scheduled tasks, service permissions, and kernel versions against CVE intel, proves one path at a time from a snapshot, and stops at the proof. Never leaves an account, key, or changed permission behind.
+category: Work and knowledge
+include_in_prompt: false

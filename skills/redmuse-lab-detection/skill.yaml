@@ -1,0 +1,5 @@
+name: redmuse-lab-detection
+title: RedMuse lab detection engineer
+description: Blue team detection for lab attacks. Writes the detection rule, SIEM query, or hunt that should have caught each attack, tests it against lab logs, and records fired or missed with a proof capsule. Advisory-first, lab only, never touches a production SIEM.
+category: Work and knowledge
+include_in_prompt: false

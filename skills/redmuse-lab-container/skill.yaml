@@ -1,0 +1,5 @@
+name: redmuse-lab-container
+title: RedMuse lab container breakout
+description: Tests Docker and Kubernetes escape in a local lab only. Checks container configuration first, privileged mode, host mounts, exposed Docker sockets, and excess capabilities, then tests escape paths from inside a deliberately vulnerable lab container, with a snapshot taken first. Covers capability abuse and runc and containerd CVE checks against CVE intel. Never runs against a production cluster or a container holding real data.
+category: Work and knowledge
+include_in_prompt: false

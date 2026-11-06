@@ -1,0 +1,5 @@
+name: redmuse-lab-traffic
+title: RedMuse lab traffic analyzer
+description: Reads a user-supplied pcap offline, Wireshark-style, dissects conversations, reconstructs the story in time, and flags credentials in clear text, sessions without TLS, DNS leaks of internal names, and protocols that should have been encrypted. No live sniffing, no promiscuous mode, lab only.
+category: Work and knowledge
+include_in_prompt: false

@@ -60,7 +60,7 @@ target, scope, and authorization first.
 
 Only for local setups with a terminal and a workspace folder,
 such as a local Muse or Claude Code install. This is not needed
-for Muse.ai. It copies the 21 skills into your custom skills
+for Muse.ai. It copies the 31 skills into your custom skills
 folder so you can invoke them by name.
 
 ```bash
@@ -102,7 +102,7 @@ Pushing a v* tag by hand still works.
 
 ## What is inside
 
-21 skills, one per job:
+31 skills, one per job: 21 core skills that run in Muse with no setup, plus 10 lab skills that need a Kali box or Docker on a machine you control:
 
 - [redmuse-orchestrator](skills/redmuse-orchestrator/SKILL.md): the gate, the teams, the budgets, validation
 - [redmuse-recon](skills/redmuse-recon/SKILL.md): attack surface inventory, passive first
@@ -119,6 +119,19 @@ Pushing a v* tag by hand still works.
 - [redmuse-threat-model](skills/redmuse-threat-model/SKILL.md): threat modeling before the scan, data flow, trust boundaries, STRIDE, DREAD, attack trees
 - [redmuse-crypto](skills/redmuse-crypto/SKILL.md): crypto review, weak algorithms and modes, key and IV reuse, randomness, password storage, TLS, JWT
 - [redmuse-findings](skills/redmuse-findings/SKILL.md): findings store in SQLite, queryable by severity, CWE, and status, with export and handoff
+
+Lab tier, opt-in, see docs/LAB-TIER.md:
+
+- [redmuse-lab-traffic](skills/redmuse-lab-traffic/SKILL.md): offline pcap analysis, no live sniffing
+- [redmuse-lab-network](skills/redmuse-lab-network/SKILL.md): layer 2/3 testing in a lab network only
+- [redmuse-lab-container](skills/redmuse-lab-container/SKILL.md): Docker and Kubernetes escape in a local lab only
+- [redmuse-lab-privesc](skills/redmuse-lab-privesc/SKILL.md): privilege escalation in a lab VM only
+- [redmuse-lab-reverse](skills/redmuse-lab-reverse/SKILL.md): static reverse engineering, lab binaries only
+- [redmuse-lab-cloud](skills/redmuse-lab-cloud/SKILL.md): cloud misconfig and IAM in a test account with written scope
+- [redmuse-lab-mobile](skills/redmuse-lab-mobile/SKILL.md): Android and iOS app testing, emulator or test device only
+- [redmuse-lab-forensics](skills/redmuse-lab-forensics/SKILL.md): disk, memory, and network forensics, lab images only
+- [redmuse-lab-malware](skills/redmuse-lab-malware/SKILL.md): malware analysis in an isolated sandbox only
+- [redmuse-lab-detection](skills/redmuse-lab-detection/SKILL.md): blue team detection rules, SIEM, and threat hunting
 - [redmuse-ui](skills/redmuse-ui/SKILL.md): UI, UX and SEO audit, desktop and mobile screenshots, annotated visual proof
 - [redmuse-fix](skills/redmuse-fix/SKILL.md): root cause patch plus retest loop
 - [redmuse-ci](skills/redmuse-ci/SKILL.md): diff-scoped merge gate for GitHub Actions

@@ -1,0 +1,5 @@
+name: redmuse-lab-reverse
+title: RedMuse lab reverse engineer
+description: Statically reverse engineers a binary, library, or firmware image the user provides, identifies what it is and what it links against, and follows one function at a time to find a hardcoded credential, an unsafe parser, or a check that can be bypassed. Works on a copy in the lab only, never runs an unknown binary on a host that matters.
+category: Work and knowledge
+include_in_prompt: false
