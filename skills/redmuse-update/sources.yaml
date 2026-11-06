@@ -34,6 +34,7 @@ sources:
       - redmuse-exploit
       - redmuse-risk
       - redmuse-threat-model
+      - redmuse-ui
       - redmuse-crypto
       - redmuse-findings
       - redmuse-lab-traffic
