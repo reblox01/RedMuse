@@ -1,0 +1,5 @@
+name: redmuse-threat-model
+title: RedMuse threat modeling
+description: Models a system before anyone scans it. Data flow, trust boundaries, assets, and actors, STRIDE threats per boundary, DREAD ranking, and attack trees for the top three threats, producing the scan plan.
+category: Work and knowledge
+include_in_prompt: false

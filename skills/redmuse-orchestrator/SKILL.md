@@ -90,6 +90,17 @@ yourself in one long pass.
   bypass, race conditions, file upload, and filter bypass.
   Harmless markers only, localhost or staging, under the
   recorded authorization. Chains hand back to verify.
+- Threat model: redmuse-threat-model. Data flow, trust
+  boundaries, STRIDE threats, DREAD ranking, attack trees.
+  Runs first, before recon, and its scan plan is what the
+  other teams work from.
+- Risk: redmuse-risk. CVSS vectors, EPSS, CISA KEV, and
+  business context, so findings are ordered by what to fix
+  first, not by class name.
+- Crypto: redmuse-crypto. Weak algorithms and modes, key
+  and IV reuse, randomness, password storage, TLS, and JWT.
+- Findings: redmuse-findings. The SQLite store, queryable
+  by severity, CWE, and status, with export and handoff.
 - Report: redmuse-report. Ranking, dedupe, writing, retest.
 
 Teams run in parallel where the target allows it, and sequentially where

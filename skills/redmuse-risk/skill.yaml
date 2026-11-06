@@ -1,0 +1,5 @@
+name: redmuse-risk
+title: RedMuse risk scoring
+description: Scores findings with CVSS 3.1/4.0 vectors, EPSS, and CISA KEV, plus business context, so a reader knows what to fix first and why. Never invents a number, unknown is written as unknown.
+category: Work and knowledge
+include_in_prompt: false

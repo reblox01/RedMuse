@@ -1,0 +1,5 @@
+name: redmuse-findings
+title: RedMuse findings store
+description: Keeps findings across runs in a SQLite store, queryable by severity, CWE, and status, with export and handoff to the next run. Tool is tools/findings.py, standard library only.
+category: Work and knowledge
+include_in_prompt: false

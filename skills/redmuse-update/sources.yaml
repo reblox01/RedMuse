@@ -32,6 +32,10 @@ sources:
       - redmuse-verify
       - redmuse-bizlogic
       - redmuse-exploit
+      - redmuse-risk
+      - redmuse-threat-model
+      - redmuse-crypto
+      - redmuse-findings
       - redmuse-ci
       - redmuse-dev-audit
       - redmuse-update

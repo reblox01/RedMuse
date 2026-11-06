@@ -1,0 +1,5 @@
+name: redmuse-crypto
+title: RedMuse crypto review
+description: Reviews how a system uses cryptography. Weak algorithms and modes, key and IV reuse, randomness, password storage, TLS and certificates, and JWT flaws, proved from code or config. Never publishes a secret it finds.
+category: Work and knowledge
+include_in_prompt: false

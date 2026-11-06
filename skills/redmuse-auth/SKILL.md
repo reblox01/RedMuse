@@ -29,6 +29,32 @@ Every finding ships with a reproduced proof, or it is not a finding.
   cookies. Info level alone, higher when combined with an XSS or a
   session flaw.
 
+## Password audit
+
+- Policy, against NIST 800-63B: minimum length 8, no forced
+  complexity rules that push users to weak patterns, no
+  password expiry without a reason, and a blocklist of
+  breached and common passwords. A policy that requires a
+  special character but allows `Password1!` is a finding
+  about the policy, not about the user.
+- Storage and hashing: bcrypt, scrypt, or Argon2 with a cost
+  that is not the minimum, and a unique salt per password.
+  MD5, SHA-1, or plain SHA-256 of a password with no salt,
+  or a single global salt, is a finding. The hashing code
+  is the proof, never crack a real password to prove it.
+- Breach exposure: check whether test accounts use passwords
+  that appear in known breaches, using a k-anonymity lookup
+  or a local blocklist, never by sending a real password to
+  a third party in full. A test password that appears in a
+  breach list is a finding about the policy, not about the
+  person.
+- Lockout and rate limits: a login that allows unlimited
+  guesses on a test account, a lockout that locks the real
+  user out instead of the attacker, and a reset flow that
+  does not rate limit. Test with dummy accounts only, and
+  record the attempt count that proved the limit, or its
+  absence.
+
 ## Privilege boundaries
 
 - Vertical escalation: a low-privilege token calling admin or staff
