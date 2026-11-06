@@ -1,0 +1,5 @@
+name: redmuse-verify
+title: RedMuse independent verifier
+description: Independently re-runs a finding's original proof, unchanged, before it is reported. Verdicts verified, candidate, rejected, or blocked, with a replayable proof capsule. Never finds, never fixes, never expands scope.
+category: Work and knowledge
+include_in_prompt: false

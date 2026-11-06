@@ -55,6 +55,19 @@ remote code execution records get version evidence only on live
 targets. A run that skipped CVE intel, or whose CVE check did not
 complete, says so in its report.
 
+## Phase 2: verify
+
+After the exploit teams, before the report, run redmuse-verify.
+It is a separate role, not the team that found the bug: it re-runs
+each finding's original proof, unchanged, with the same harmless
+marker, and returns one verdict per finding: verified, candidate,
+rejected, or blocked, plus a replayable proof capsule. A finding
+that was never verified is labelled unvalidated in the report,
+never confirmed. Verification is not the fix retest: verify runs
+before reporting, redmuse-fix retests after a patch, and verify
+can be called again for an independent retest of a fix when the
+fix team asks for one.
+
 ## Teams
 
 Fan out to specialist subagents, one team per phase. Never do every phase
@@ -68,6 +81,8 @@ yourself in one long pass.
 - Web: redmuse-web. Black-box OWASP Top 10.
 - API: redmuse-api. OWASP API Security Top 10.
 - Code: redmuse-code. White-box, only when source is in scope.
+- Verify: redmuse-verify. Independent re-run of each proof,
+  before the report. Never the finder, never the fixer.
 - Report: redmuse-report. Ranking, dedupe, writing, retest.
 
 Teams run in parallel where the target allows it, and sequentially where
@@ -105,9 +120,11 @@ go in the report as unvalidated, never as confirmed.
 
 ## Validation
 
-Reproduce each candidate proof yourself with a minimal request before it
-becomes a finding. If it does not reproduce, downgrade it to unvalidated
-and say why. If it reproduces only with a destructive payload, drop it
+Validation is redmuse-verify's job, not the finder's and not yours
+in the same pass. Hand each candidate finding to verify with its
+full record, and take back its verdict and proof capsule. If a
+finding does not reproduce, downgrade it to unvalidated and say
+why. If it reproduces only with a destructive payload, drop it
 and note the refusal. Severity follows reachability and impact, not
 scanner noise.
 

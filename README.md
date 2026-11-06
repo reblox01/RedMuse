@@ -60,7 +60,7 @@ target, scope, and authorization first.
 
 Only for local setups with a terminal and a workspace folder,
 such as a local Muse or Claude Code install. This is not needed
-for Muse.ai. It copies the 14 skills into your custom skills
+for Muse.ai. It copies the 15 skills into your custom skills
 folder so you can invoke them by name.
 
 ```bash
@@ -102,7 +102,7 @@ Pushing a v* tag by hand still works.
 
 ## What is inside
 
-14 skills, one per job:
+15 skills, one per job:
 
 - [redmuse-orchestrator](skills/redmuse-orchestrator/SKILL.md): the gate, the teams, the budgets, validation
 - [redmuse-recon](skills/redmuse-recon/SKILL.md): attack surface inventory, passive first
@@ -112,6 +112,7 @@ Pushing a v* tag by hand still works.
 - [redmuse-auth](skills/redmuse-auth/SKILL.md): login, session, JWT, privilege boundaries
 - [redmuse-code](skills/redmuse-code/SKILL.md): white-box data-flow review
 - [redmuse-report](skills/redmuse-report/SKILL.md): severity, dedupe, honest coverage, retest
+- [redmuse-verify](skills/redmuse-verify/SKILL.md): independent verifier, re-runs each proof unchanged before reporting, verdicts verified, candidate, rejected, or blocked, with a replayable proof capsule
 - [redmuse-ui](skills/redmuse-ui/SKILL.md): UI, UX and SEO audit, desktop and mobile screenshots, annotated visual proof
 - [redmuse-fix](skills/redmuse-fix/SKILL.md): root cause patch plus retest loop
 - [redmuse-ci](skills/redmuse-ci/SKILL.md): diff-scoped merge gate for GitHub Actions
