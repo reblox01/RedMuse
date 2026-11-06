@@ -44,6 +44,15 @@ a terminal, and install steps, and do not work from a hosted session.
 | Context7, docs lookup | Connection or key per host | Recon, code | Hosted |
 | next-devtools, dev-server inspection | Running Next.js 16+ dev server | Dev-audit, code | Local, no key |
 | cybersecurity MCP, NVD lookup | Nothing, NVD is free | CVE intel | Local, no key |
+| NmapMCP, network scan | Python 3.13, nmap binary, uv, lab host only | Recon, lab network only | Local, no key |
+
+Lab-only MCPs: NmapMCP runs on the lab host, never from a hosted
+Muse.ai session, and only inside the lab gate. Its own guardrails
+apply on top of RedMuse: a flag allowlist, public addresses
+blocked by default unless NMAP_ALLOW_PUBLIC=1 is set for that run,
+at most 3 scans in parallel, a hard timeout, and scan diffing
+between runs. It maps to redmuse-lab-network, never to core
+recon, and a public target needs the written scope to name it.
 
 Other MCPs may be added the same way, provided they map to a phase
 and their cost and install needs are stated honestly. MCPs that do

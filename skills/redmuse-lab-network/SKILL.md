@@ -38,6 +38,17 @@ only happens after the lab gate below is met.
   redmuse-runs/<run-name>/, one file per finding plus its proof
   capsule.
 
+## Tool guardrails
+
+Every scan tool this skill calls follows the five guardrails in
+docs/LAB-TIER.md, from the NmapMCP pattern: a flag allowlist
+written in the run log, lab addresses only unless the written
+scope names a public one, at most 3 scans in parallel, a hard
+timeout on every call, and saved results so a later run can diff
+against the earlier one. A tool that cannot meet all five does
+not run. A generic run-any-command tool fails the allowlist by
+design, so it is never used here.
+
 ## Method: map, then test one service at a time
 
 1. Map the network. List live hosts, their addresses, and their

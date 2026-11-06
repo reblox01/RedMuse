@@ -94,6 +94,36 @@ one of them is missing.
 A lab run that skipped any of these six says so in its report,
 and the classes it skipped are listed as not run, never as clean.
 
+## Tool guardrails, from NmapMCP
+
+Every tool a lab skill calls, and every MCP a lab run uses, follows
+these five rules. They are the guardrail pattern of the NmapMCP
+server, written here as the rule for any lab tool, not as a quote
+of that project:
+
+1. Flag allowlist. Only the flags the skill lists for that tool
+   may reach the shell. An agent never invents a new flag, and a
+   flag outside the list is refused, not tried.
+2. Private-range guard. Lab tools run against lab addresses only.
+   A public address is refused unless the written scope names it
+   explicitly. A range the scope does not name is out, even if
+   it sits on the same network.
+3. Concurrency cap. At most 3 scans or heavy tool runs in
+   parallel. A fourth waits. This keeps one agent from
+   flooding its own lab.
+4. Hard timeout. Every tool call has a fixed maximum run time,
+   written in the skill. A call that hits it is killed, its
+   partial output is kept, and the run moves on. No call runs
+   without a timeout.
+5. Output diffing. Results are saved per run, so a later run can
+   diff against the earlier one. The diff is how a fix is proven:
+   what changed, what stayed, what is new. A finding without a
+   saved result to diff against is unvalidated.
+
+A tool that cannot meet all five does not run in the lab. A
+generic run-any-command tool fails rule 1 by design, so it is
+never used as a lab tool, however convenient it looks.
+
 ## The skills, in build order
 
 Every lab skill is built advisory-first. That means the first
