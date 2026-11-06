@@ -29,6 +29,7 @@ sources:
       - redmuse-code
       - redmuse-report
       - redmuse-fix
+      - redmuse-ui
       - redmuse-verify
       - redmuse-bizlogic
       - redmuse-exploit
