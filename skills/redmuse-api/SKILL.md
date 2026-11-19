@@ -32,6 +32,25 @@ with a reproduced proof of concept request, or it is not a finding.
   a real flood.
 - SSRF: URL fields and webhook targets pointed at internal endpoints
   with a harmless canary. Stop at proof of reachability.
+- CSRF: missing or bypassable token on state-changing API requests.
+  Submit a state-changing call (POST, PUT, PATCH, DELETE) once with
+  the token or session cookie the client normally sends, once with no
+  token, once with a wrong or empty token, and once with a token from
+  another session. After each call, read back the affected object to
+  check whether the state actually changed. Proof is a state change
+  without a valid token, or with another session's token. A 401, 403
+  or 400 that blocks the no-token call is clean, not a finding.
+- CORS misconfiguration: a permissive Access-Control-Allow-Origin
+  header on API responses that carry credentials or sensitive data.
+  Send a request with `Origin: https://evil.example` and record the
+  Access-Control-Allow-Origin and Access-Control-Allow-Credentials
+  headers; repeat with an OPTIONS preflight carrying
+  Access-Control-Request-Method and Access-Control-Request-Headers.
+  Proof is an ACAO that reflects an arbitrary Origin combined with
+  `Access-Control-Allow-Credentials: true`, or a wildcard ACAO with
+  credentials true. A wildcard ACAO with no credentials on a public,
+  non-sensitive endpoint is low or info, not a confirmed finding.
+  A response with no ACAO header at all is clean for this class.
 - Injection: SQL, NoSQL, and command injection with benign markers.
   Never with destructive statements.
 - Security misconfiguration and inventory failures: verbose errors,

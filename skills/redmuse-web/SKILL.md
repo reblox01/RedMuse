@@ -20,6 +20,26 @@ concept, or it is not a finding.
 - SSRF: URL and fetch parameters pointed at internal metadata endpoints
   and localhost, with a harmless canary. Stop at proof of reachability,
   never pivot further.
+- CSRF: missing or bypassable token on state-changing requests. Find a
+  state-changing form or action (POST, PUT, PATCH, DELETE), submit it
+  once with the token from the form, once with no token, once with a
+  wrong or empty token, and once with a token taken from another
+  session. After each submit, check with a follow-up GET whether the
+  state actually changed. Proof is a state change that happens without
+  a valid token, or with another session's token. A 403 or 400 that
+  blocks the no-token submit is clean, not a finding. SameSite cookies
+  are defense in depth, not proof the class is closed.
+- CORS misconfiguration: a permissive Access-Control-Allow-Origin
+  header on responses that carry credentials or sensitive data. Send
+  a GET with `Origin: https://evil.example` and record the
+  Access-Control-Allow-Origin and Access-Control-Allow-Credentials
+  headers; repeat with an OPTIONS preflight carrying
+  Access-Control-Request-Method and Access-Control-Request-Headers.
+  Proof is an ACAO that reflects an arbitrary Origin combined with
+  `Access-Control-Allow-Credentials: true`, or a wildcard ACAO with
+  credentials true. A wildcard ACAO with no credentials on a public,
+  non-sensitive resource is low or info, not a confirmed finding.
+  A response with no ACAO header at all is clean for this class.
 - Security misconfiguration: default credentials on test accounts only,
   verbose errors, debug endpoints, directory listing, missing security
   headers (info level unless combined with a real exploit).
