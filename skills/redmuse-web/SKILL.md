@@ -40,6 +40,27 @@ concept, or it is not a finding.
 - Log every attempt: request, response, and result. The orchestrator
   reproduces from your log, so a missing request means a dropped finding.
 
+## Decoy and indistinguishability
+
+- A decoy response must be indistinguishable from a fresh response
+  across the WHOLE response, not field by field. Fixing one oracle
+  (for example a decoy csrf_token) while a second oracle in the
+  SAME response body (for example created_at) survives leaves the
+  decoy distinguishable. For every fresh-vs-decoy pair, diff ALL
+  fields and headers: timestamps, id formats, token entropy and
+  source, Set-Cookie count and attributes, and the Date header.
+  Diff both total durations AND per-field lags.
+- Probe method for timestamp oracles: compute lagRecv, the receipt
+  time minus created_at, for the fresh and decoy responses and
+  compare the two distributions. Note the resolution limit: the
+  Date header at 1s resolution cannot resolve an oracle of about
+  1s, so a Date-header comparison that looks clean proves nothing
+  about a sub-second or ~1s timestamp gap; use the body timestamp
+  and receipt time instead.
+- A decoy finding must name every field that differs, with the
+  fresh and decoy values side by side, and the fix must cover all
+  of them in one change, not one field per round.
+
 ## Output
 
 Return one finding record per confirmed class, in the orchestrator shape:
