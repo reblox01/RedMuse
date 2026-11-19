@@ -39,6 +39,39 @@ Update finding statuses in findings.json and the per-finding files.
 Never rewrite the original proof or history. A retest that cannot run
 (for example the target is down) is marked blocked, not fixed.
 
+- Race and TOCTOU retests: if the original proof is a
+  millisecond-wide race, use the widened-window recipe in
+  redmuse-orchestrator (TEST-ONLY sleep after the commit point,
+  throwaway copy only). Record the un-widened baseline, the
+  widened pre-fix rate, and the widened post-fix rate. Never
+  ship the sleep, and never report a race fix as live-proved
+  from an un-widened sweep alone.
+
+## Verification that needs a server, and scratch ports
+
+Do not start a server by default. Start one only for a check
+the task brief names as server-needed; scanner and unit checks
+run without a server. Use only the scratch port the brief
+assigns your group, and check it is free before starting. If
+it is in use, stop and ask the coordinator for a new port.
+Never kill another group's server.
+
+## Patch-apply self-check
+
+Before handing a patch to the coordinator, apply it to a fresh
+copy of the pristine checkout and show it applies cleanly:
+
+- Copy the pristine tree to a fresh directory.
+- Run `git apply --check <patch>` then `git apply <patch>`
+  (or `patch -p1 --dry-run < <patch>` then
+  `patch -p1 < <patch>`), and record the output. When the
+  patch was generated from absolute paths, as in this
+  round's `diff -ruN` command, add `-p4` to the
+  `git apply` calls (or `-p4` to `patch`).
+- If it does not apply cleanly, fix the patch. Do not hand
+  over a patch that fails this check, even when the failure
+  looks small.
+
 ## Output
 
 Return a fix report: per finding, the patch summary (files changed,
