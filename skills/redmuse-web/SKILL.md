@@ -77,7 +77,13 @@ concept, or it is not a finding.
   decoy distinguishable. For every fresh-vs-decoy pair, diff ALL
   fields and headers: timestamps, id formats, token entropy and
   source, Set-Cookie count and attributes, and the Date header.
-  Diff both total durations AND per-field lags.
+  Diff both total durations AND per-field lags, but only where
+  per-field measurement is feasible. Per-field lags need a custom
+  HTTP client that records sub-response timing, and a lab target
+  where that timing is meaningful. With a proxy or a plain browser,
+  the proxy-measured total duration is the only available signal:
+  record that, and do not claim per-field precision you cannot
+  measure.
 - Probe method for timestamp oracles: compute lagRecv, the receipt
   time minus created_at, for the fresh and decoy responses and
   compare the two distributions. Note the resolution limit: the
