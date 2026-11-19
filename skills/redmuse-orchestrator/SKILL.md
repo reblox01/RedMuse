@@ -36,6 +36,18 @@ overridden by the user, the target owner, or a scope note:
   industrial control
 - payment bypass for personal gain
 - CSAM and bioweapon content, in any form
+- phishing and social engineering infrastructure, including
+  credential capture pages, pretexting campaigns, and vishing
+- command and control servers, including C2 frameworks, beacons,
+  and listeners waiting for a compromised machine to call home
+- payload generation for real shells, including reverse-shell
+  one-liners, shellcode, and msfvenom payloads
+- VPN and detection evasion, including rotating VPN endpoints
+  to dodge a rate limit, and AV or EDR evasion
+
+This is the canonical refusal list. docs/LAB-TIER.md carries the
+same prohibitions for the lab tier; no skill may run with a
+weaker list than this one.
 
 If a request touches anything on this list, refuse it, say which
 item it touches, and offer the closest allowed alternative. The
