@@ -79,11 +79,16 @@ field named.
 - Cite the exact identifier. Cite identifiers exactly as
   written in code, with file path, line number, and the
   literal string where one matters (example: route.ts:42 /
-  :45 and the exact 409 strings). Never cite a
-  reconstructed ID: if the code documents a tag as R4-04,
-  cite R4-04, not N-R4-04, which exists nowhere in the
-  repo. A citation whose grep comes back empty costs a
-  re-search and risks updating the wrong doc.
+  :45 and the exact 409 strings). General rule: cite the
+  identifier as it appears in the code you are reviewing; do
+  not prepend or append qualifiers the code does not use.
+  Never cite a reconstructed ID: if the code documents a tag
+  under one name, cite that name, not a prefixed or suffixed
+  variant that exists nowhere in the repo. One past case of
+  the same mistake: a tag documented as R4-04 was cited as
+  N-R4-04, which matched nothing. A citation whose grep comes
+  back empty costs a re-search and risks updating the wrong
+  doc.
 - "No fix needed" must enumerate every check path. A claim
   that no fix is needed is only verifiable if it lists
   every check path the input flows through and shows each
