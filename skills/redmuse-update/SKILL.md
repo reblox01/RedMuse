@@ -72,6 +72,29 @@ Statuses mean:
   docs behind the edge checklist. Record them as manual, never as
   a version number, and never as clean.
 
+## Tamper check on the pull and on sources.yaml
+
+sources.yaml is the single source of truth for the check, so a
+tampered sources.yaml could redirect it, and a fast-forward pull
+is only safe when it really came from the RedMuse origin. Before
+relying on a pulled version, verify the pull was legitimate:
+
+- Check the pulled HEAD commit against the known release tag or
+  the GitHub release page for RedMuse. The commit the run proceeds
+  on must match a tag or release the user recognizes. A pulled
+  commit that matches no known tag or release is not trusted.
+- Check the origin remote is the expected RedMuse repo
+  (`git remote -v`). A pull from an unexpected origin is not
+  trusted, even if it fast-forwards.
+- Review any change the pull made to sources.yaml itself
+  (`git diff HEAD@{1} HEAD -- skills/redmuse-update/sources.yaml`
+  or the equivalent for the pre-pull HEAD). A new source, a
+  changed URL, or a changed covers list is reviewed like any
+  skill change before the check trusts it.
+
+If any of these checks fails, stop and report it. Do not run on
+the pulled version, and do not record the check as passed.
+
 ## Source rules
 
 The authoritative list lives in sources.yaml next to this skill;
