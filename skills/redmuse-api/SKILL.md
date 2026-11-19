@@ -122,6 +122,17 @@ endpoint found as untested coverage, not as clean.
 
 ## Probe shapes
 
+- Sibling-route sweep. When a finding is about a helper's call-site
+  pattern, list ALL call sites and say which were checked. Example:
+  a guard flagged on one endpoint missed that a sibling endpoint
+  calls the same handler or helper with no guard at all. When source
+  is in scope, run `grep -rn <helper-name>` over the target and
+  enumerate every call site; when black-box only, enumerate sibling
+  endpoints from the OpenAPI spec, the route list, and the endpoint
+  inventory built during enumeration. Probe each sibling endpoint
+  the same way you probed the first one, and record the checked list
+  in the finding. A finding that names one endpoint while a sibling
+  shares the helper is incomplete.
 - Silent non-standard statuses. Grep repo-wide for non-standard
   status returns (499, 444, 440) and confirm each one has a log line
   or is intentionally silent. Example probe: `grep -rn "499\|444\|440"`
