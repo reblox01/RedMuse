@@ -32,6 +32,25 @@ with a reproduced proof of concept request, or it is not a finding.
   a real flood.
 - SSRF: URL fields and webhook targets pointed at internal endpoints
   with a harmless canary. Stop at proof of reachability.
+- CSRF: missing or bypassable token on state-changing API requests.
+  Submit a state-changing call (POST, PUT, PATCH, DELETE) once with
+  the token or session cookie the client normally sends, once with no
+  token, once with a wrong or empty token, and once with a token from
+  another session. After each call, read back the affected object to
+  check whether the state actually changed. Proof is a state change
+  without a valid token, or with another session's token. A 401, 403
+  or 400 that blocks the no-token call is clean, not a finding.
+- CORS misconfiguration: a permissive Access-Control-Allow-Origin
+  header on API responses that carry credentials or sensitive data.
+  Send a request with `Origin: https://evil.example` and record the
+  Access-Control-Allow-Origin and Access-Control-Allow-Credentials
+  headers; repeat with an OPTIONS preflight carrying
+  Access-Control-Request-Method and Access-Control-Request-Headers.
+  Proof is an ACAO that reflects an arbitrary Origin combined with
+  `Access-Control-Allow-Credentials: true`, or a wildcard ACAO with
+  credentials true. A wildcard ACAO with no credentials on a public,
+  non-sensitive endpoint is low or info, not a confirmed finding.
+  A response with no ACAO header at all is clean for this class.
 - Injection: SQL, NoSQL, and command injection with benign markers.
   Never with destructive statements.
 - Security misconfiguration and inventory failures: verbose errors,
@@ -43,15 +62,89 @@ with a reproduced proof of concept request, or it is not a finding.
 - Log every attempt: full request, full response, and result. The
   orchestrator reproduces from your log.
 
+## GraphQL
+
+If the target exposes a GraphQL endpoint (usually /graphql), test
+these classes. Each class needs probe steps, expected vs observed
+behavior, and evidence. A GraphQL endpoint with no dedicated probes
+is untested, not clean.
+
+- Introspection abuse. Probe: POST `{"query": "{ __schema { types
+  { name } } }"}` to the endpoint, then request field lists for the
+  types returned. Expected: introspection disabled in production, or
+  the schema restricted to what the client needs. Observed: record
+  the exact response. Proof is a returned schema that exposes types,
+  fields, or mutations the client never uses. An introspection query
+  that returns an error is clean for this class.
+- Query depth and complexity resource consumption. Probe: send a
+  shallow query first and record response time and size, then the
+  same shape nested one level deeper at a time (for example user,
+  then user friends, then friends of friends), still with small
+  result sets. Expected: the server rejects or caps queries past a
+  stated depth or complexity limit. Observed: record time, size, and
+  status per depth. Proof is response time or size growing sharply
+  with depth and no cap firing. Never send a real flood; a small
+  depth ladder proves the missing cap.
+- Batching attacks. Probe: send one request carrying an array of
+  several queries (for example several login or password-reset
+  mutations in a single batch) and count how many executed. Expected:
+  batching disabled, or a small batch limit, or per-query rate
+  limits that still apply inside a batch. Observed: record how many
+  of the batched operations ran and their results. Proof is a batch
+  that executes operations past the single-request rate limit, for
+  example many login attempts in one HTTP request with no 429.
+- Authorization bypass via field aliases. Probe: with a low-privilege
+  token, request the same field twice under different aliases with
+  different arguments in one query, for example `a: user(id: "1")
+  { name }` and `b: user(id: "2") { name }`, where id 2 belongs to
+  another user. Expected: the authorization check applies per field
+  resolution, so the other user's object is denied. Observed: record
+  which alias returned data and which was denied. Proof is the
+  other user's data returned under the aliased field while the
+  direct request for the same object is denied or would be denied.
+- Evidence for every GraphQL finding: the exact query sent, the full
+  response, the token privilege used, and the expected vs observed
+  behavior above. A query that returns data is not proof on its own;
+  the comparison against the expected behavior is what makes it a
+  finding.
+
+## gRPC
+
+gRPC methodology in this skill is thin: there is no probe section for
+it yet, and this paragraph does not invent one. A full gRPC section
+must cover, at minimum: service enumeration (which services and
+methods are exposed, including server reflection when enabled),
+method authorization (each method called with a low-privilege
+credential, not just the ones the client calls), and message
+validation (malformed, oversized, or unexpected fields and how the
+server handles them). Until that section exists, record any gRPC
+endpoint found as untested coverage, not as clean.
+
 ## Probe shapes
 
-- Silent non-standard statuses. Grep repo-wide for non-standard
+- Sibling-route sweep. When a finding is about a helper's call-site
+  pattern, list ALL call sites and say which were checked. Example:
+  a guard flagged on one endpoint missed that a sibling endpoint
+  calls the same handler or helper with no guard at all. When source
+  is in scope, run `grep -rn <helper-name>` over the target and
+  enumerate every call site; when black-box only, enumerate sibling
+  endpoints from the OpenAPI spec, the route list, and the endpoint
+  inventory built during enumeration. Probe each sibling endpoint
+  the same way you probed the first one, and record the checked list
+  in the finding. A finding that names one endpoint while a sibling
+  shares the helper is incomplete.
+- Silent non-standard statuses. This probe is conditional on what
+  access the run has. When source is in scope, the grep version of
+  this check lives in redmuse-code: grep repo-wide for non-standard
   status returns (499, 444, 440) and confirm each one has a log line
-  or is intentionally silent. Example probe: `grep -rn "499\|444\|440"`
-  plus a check of nearby logging (`console`, logger calls) for each
-  hit. A status that returns silently, with no log line, is a
-  finding; an intentionally silent one must be recorded as such, not
-  left unexamined.
+  or is intentionally silent. When black-box only, do not grep: probe
+  by sending requests and observing responses. Send requests that
+  trigger error paths (bad ids, bad auth, oversized bodies) and
+  record the status returned, whether the body is empty, and whether
+  any log line appears in the logs available to the run. A status
+  that returns silently, with no log line, is a finding; an
+  intentionally silent one must be recorded as such, not left
+  unexamined.
 - Busy-database 503 is a timeout to a short-timeout client. When an
   API returns 503 after a long database busy wait (for example a 5s
   `busy_timeout` producing a hang of about 5.042s before the 503),
@@ -61,6 +154,17 @@ with a reproduced proof of concept request, or it is not a finding.
   docs: state the expected wait, the retryable status, and a
   backoff, so a caller can distinguish a busy-database retry from a
   real failure.
+- Rate-limit probe hygiene. The unique-IP-per-invocation principle
+  is not register-specific; it applies to any rate-limited API
+  endpoint. Rate-limit budgets are per-IP per-window, so probe IPs
+  must be unique per invocation, not just per process: a
+  per-process IP counter restarts every run and silently re-burns
+  the same bucket. Generate a fresh unique IP per probe invocation
+  (for example from the run id and trial number) and log the IP
+  used per trial, consistent with the hygiene note in redmuse-auth.
+  Do not burn the bucket and then misread the resulting 429s as a
+  target failure: a 429 after the budget is spent proves the limit
+  exists, not that the endpoint is broken.
 
 ## Output
 

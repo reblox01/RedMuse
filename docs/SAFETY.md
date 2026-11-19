@@ -24,7 +24,16 @@ target. If any piece is missing, the run stays passive or does not start.
   payload designed to break availability.
 - Credential theft, session hijacking of real users, or social engineering.
 - Container escapes, host compromise, or lateral movement outside the
-  agreed target.
+  agreed target, except for one controlled case: redmuse-lab-container
+  tests escape paths only inside a lab container built to be escaped,
+  on a lab host the user controls, behind the lab gate in
+  docs/LAB-TIER.md (written scope naming the exact asset, tests, and
+  window, plus a snapshot and rollback plan). That is a controlled
+  lab escape test, not host compromise: it never touches a production
+  cluster, a container holding real data, or a host outside the lab,
+  and it never leaves access behind. Any escape attempt outside those
+  bounds, and any host compromise or lateral movement beyond the lab
+  container, stays never in scope.
 - Bypassing a platform's own verification or abuse controls (for example
   a scanner's domain verification step).
 

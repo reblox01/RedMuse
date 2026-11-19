@@ -84,3 +84,10 @@ boundaries, in what order. List assumptions and gaps
 separately, so the owner can correct them before the scan
 starts. A threat model nobody read is not a plan, it is a
 document, so the scan plan is the part that matters most.
+
+Threat model outputs are scan plan artifacts, not finding
+records. They carry no id, no severity, no proof, and no CWE,
+and verifiers do not run them through redmuse-verify. A model
+threat becomes a finding only when an exploit team proves it
+on the target and records it in the orchestrator finding
+shape.

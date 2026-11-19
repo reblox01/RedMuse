@@ -64,6 +64,12 @@ Every finding ships with a reproduced proof, or it is not a finding.
   was dead on SQLite; the contrast between the pre-fix run (for
   example orphans on 2 of 2 aborted trials) and the post-fix run
   (0 of 7) is what proves the yield fixed it. Record both runs.
+- Ownership: this section names the finding rule. The full
+  widened-window recipe lives in redmuse-orchestrator,
+  redmuse-fix owns retesting after a patch, and redmuse-verify
+  independently re-proves a fix with the recipe in redmuse-verify.
+  A finding from this section names the exact await so the other
+  two can run the recipe without guessing it.
 
 ## Password audit
 
@@ -114,12 +120,18 @@ Every finding ships with a reproduced proof, or it is not a finding.
   absence.
 - Live-probe setup for register and login rate limits: a
   per-IP bucket (for example 5/hr per IP) blocks repeated
-  probes unless each attempt uses a distinct client IP. Where
-  the target honours X-Forwarded-For and no trusted proxy is
-  set, use a distinct X-Forwarded-For last entry per attempt
-  (local testing only); otherwise use distinct source IPs.
-  Do not burn the bucket and then misread the resulting 429s
-  as a target failure.
+  probes unless each attempt uses a distinct client IP. First
+  establish the normal rate-limit baseline using genuine source
+  IPs: run the attempts from distinct real source IPs (or one IP,
+  counting attempts until the limit fires) and record the attempt
+  count that triggers the limit, or its absence. Only then test
+  spoofable forwarding headers as a separate, explicitly recorded
+  security check: repeat the probe with a distinct X-Forwarded-For
+  value per attempt and record whether the limit is bypassed. A
+  bypass is a finding about trusting an untrusted forwarding
+  header, not probe setup. Never present X-Forwarded-For spoofing
+  as ordinary probe hygiene, and do not burn the bucket and then
+  misread the resulting 429s as a target failure.
 - Probe hygiene: rate-limit budgets are per-IP per-window, so
   probe IPs must be unique per invocation, not just per
   process. A per-process IP counter restarts every run and
@@ -144,6 +156,18 @@ Every finding ships with a reproduced proof, or it is not a finding.
   the same flaw is not reported twice under two names.
 - Tenant isolation: cross-tenant reads or writes in multi-tenant
   apps, using two test tenants.
+
+## Identity federation (thin coverage)
+
+Identity federation procedures in this skill are thin. There is
+no full section here for OAuth 2.0, OIDC, or SAML, and no
+federation probe is defined in this skill. A full section must
+cover: authorization-flow tests with test accounts, PKCE,
+redirect URI validation, token audience and issuer validation,
+SAML assertions, and federation trust boundaries. Until that
+section exists, do not improvise federation probes; record
+federation flows as untested, with the reason, and do not report
+them as clean.
 
 ## Output
 

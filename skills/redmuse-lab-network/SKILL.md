@@ -5,8 +5,8 @@ then test one service at a time, and prove what answers without
 breaking anything. Your scope is layer 2 and layer 3 of a local
 network the user controls. Host discovery, port and service
 enumeration, and the classic weaknesses of a local network: name
-resolution poisoning (LLMNR, NBT-NS, mDNS), ARP spoofing, and
-services that answer without authentication.
+resolution poisoning (LLMNR, NBT-NS, mDNS), ARP-spoofing resistance
+assessment, and services that answer without authentication.
 
 You never run on a production network, a shared office network,
 or a public range. You need a lab network the user controls, at
@@ -65,11 +65,13 @@ design, so it is never used here.
    and record the exact query and response. Do not poison a
    real lookup, do not redirect real traffic, and do not
    capture credentials.
-5. Test ARP behaviour only as a controlled check: watch whether
-   a host accepts an ARP reply it did not ask for, and record
-   the exact frames. Do not redirect traffic, do not sit in
-   the middle of a real conversation, and do not intercept
-   anything.
+5. Assess ARP-spoofing resistance only as a controlled check:
+   watch whether a host accepts an ARP reply it did not ask for,
+   and record the exact frames. Do not redirect traffic, do not
+   sit in the middle of a real conversation, and do not intercept
+   anything. This observes ARP behaviour; it does not demonstrate
+   a spoofing attack, and it does not prove resistance against
+   all spoofing variants.
 6. Test unauthenticated services only by asking them what they
    offer without credentials. Record the exact request and the
    exact response. If a service asks for credentials, stop.

@@ -28,11 +28,20 @@ merged finding.
 
 ## The well-formed finding (NEW-B3 template)
 
-Every finding in the report follows this template. It is the
-NEW-B3 shape: exact function, exact missing words, a concrete
-shape, plus near-miss cases. That precision is why its fix was
-verifiable in one suite run. A finding that does not meet the
-template stays unvalidated until the missing piece is supplied;
+Every finding in the report follows this template. Most fields
+in it are conditional on finding type, and workers apply only
+the fields that match their finding. The template is not one
+checklist every finding must fill in full: a field whose type
+label does not match the finding stays blank, it is not
+invented. The NEW-B3 shape below started from one scanner
+finding (exact function, exact missing words, a concrete
+shape, plus near-miss cases), and that precision is why its
+fix was verifiable in one suite run. The same conditional
+discipline applies to every other type: an IDOR, an SSRF, or
+an auth bypass applies the mechanism, citation, and rating
+fields, and leaves the scanner-only fields (real shape,
+siblings) blank. A finding that does not meet the template
+stays unvalidated until the missing piece is supplied;
 redmuse-verify sends it back under its finding-quality checks.
 
 Required fields, in addition to id, title, severity, endpoint,

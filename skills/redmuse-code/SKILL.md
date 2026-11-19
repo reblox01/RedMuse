@@ -107,12 +107,17 @@ a confirmed/not-found result) and log only on confirmation.
 
 ### Changes-based branches state their verification strength
 
-Every new `changes`-based branch must state its verification strength
-in its comment: attributive (the branch can tie the change to this
-caller, for example via an owner id or a key hash) or state-only (the
-branch can only say a row changed, with a documented phantom-success
-gap where it cannot). Require the statement at review time; a branch
-with no strength statement is incomplete.
+Every `changes`-based branch added in the current PR must state its
+verification strength in its comment: attributive (the branch can
+tie the change to this caller, for example via an owner id or a key
+hash) or state-only (the branch can only say a row changed, with a
+documented phantom-success gap where it cannot). This applies to
+branches added in the current PR only, not to pre-existing branches
+already in the codebase: a worker reviewing an existing codebase
+does not have to add strength statements to every old branch, and
+only flags an old branch when the change under review touches it.
+Require the statement at review time; a branch added in the current
+PR with no strength statement is incomplete.
 
 ### Route auth needs a single source of truth
 
