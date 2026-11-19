@@ -61,6 +61,48 @@ concept, or it is not a finding.
   fresh and decoy values side by side, and the fix must cover all
   of them in one change, not one field per round.
 
+## Probe shapes
+
+- Sibling-route sweep. When a finding is about a helper's call-site
+  pattern, list ALL call sites and say which were checked. Example:
+  a guard flagged on register only missed that login calls the same
+  `createSession` with no guard at all. Run `grep -rn createSession`
+  (or the helper's name) over the target, enumerate every call site,
+  probe each sibling route, and record the checked list in the
+  finding. A finding that names one route while a sibling shares the
+  helper is incomplete.
+- Silent non-standard statuses. Grep repo-wide for non-standard
+  status returns (499, 444, 440) and confirm each one has a log line
+  or is intentionally silent. Example probe: `grep -rn "499\|444\|440"`
+  plus a check of nearby logging (`console`, logger calls) for each
+  hit. A status that returns silently, with no log line, is a
+  finding; an intentionally silent one must be recorded as such, not
+  left unexamined.
+- CSP checks classify responses by content-type. Do not flag every
+  response without CSP the same way. Documents
+  (`text/html` and other document types) require the full nonce CSP.
+  On non-documents (images, favicon, fonts, other static assets)
+  require at least `frame-ancestors` (or `X-Frame-Options`) plus
+  `nosniff`, and report a missing CSP there as low severity header
+  hygiene, not as a missing-policy finding. A blanket "every response
+  must carry CSP" check overstates urgency on images; a "documents
+  only" check misses real gaps such as the favicon.
+- PRG and redirect probes submit the real form first. Drive the real
+  form submit in a browser and assert the landing URL; that is the
+  default probe. A raw POST with a hand-picked content-type can miss
+  the browser's actual behaviour, since a 303 bug may show only for
+  certain content types. Use raw POSTs as supplements, with varied
+  content-types: JSON, urlencoded, and urlencoded with charset, and
+  record the status and landing URL for each.
+- Never read nonces from the live DOM. `getAttribute('nonce')`
+  returns `''` for every script once parsed (HTML spec nonce hiding),
+  so a DOM-based nonce probe always reports "nonce missing" even when
+  the page is correct. Read the nonce from the response
+  `Content-Security-Policy` header and from the raw response HTML
+  (`nonce="<header-nonce>"` occurrences), and check the header nonce
+  matches the nonce in the raw HTML. Treat zero CSP violations plus
+  working client components as the live confirmation.
+
 ## Output
 
 Return one finding record per confirmed class, in the orchestrator shape:
