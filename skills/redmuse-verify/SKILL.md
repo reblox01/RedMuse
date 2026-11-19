@@ -158,6 +158,43 @@ field named.
    passes once in three is not verified, it is flaky, and it
    goes back as candidate with the flakiness noted.
 
+## Race and TOCTOU fixes: independent re-proof with the widened-window recipe
+
+You independently re-prove a race or TOCTOU fix; you do not take
+the fix team's retest on trust. Ownership: redmuse-auth names the
+exact await when the finding is made, redmuse-fix owns retesting
+after a patch, and you own the independent re-proof here. The full
+widened-window recipe lives in redmuse-orchestrator; this section
+is your copy of the method for the verifier role, not a third
+restatement of every step.
+
+1. Get the finding record and confirm it names the exact await
+   and the state that can change across it. If it does not, send
+   it back as candidate with the missing await named.
+2. Re-run the proof on the pre-fix code first, un-widened, and
+   record the baseline hit rate. Then re-run it widened, in a
+   throwaway copy only, with a TEST-ONLY sleep of 300 to 500 ms
+   after the commit point and before the abort check or cleanup,
+   aborting each trial during the sleep window. Never insert the
+   sleep in the real repo or shipped code. Record orphans per
+   trial and the client outcome per trial, aborted vs status
+   received.
+3. Re-run the same widened sweep on the fixed code, with the same
+   sleep. Expect 0 orphans, with a cleanup log line per aborted
+   trial that names the deleted row.
+4. Confirm no TEST-ONLY code remains, then re-run the original
+   proof once, un-widened.
+5. Record all three rates in your verification record: un-widened
+   pre-fix, widened pre-fix, widened post-fix, plus the cleanup
+   logs. A race fix is not independently re-proved from an
+   un-widened sweep alone.
+
+Limit: the sleep supplies an event-loop yield, so a widened sweep
+alone cannot prove a guard that must observe an abort during a
+synchronous write with no yield. Say so in the record, and use a
+lock-held or stalled-write repro for the yield question. That
+repro is a separate recipe, not covered here.
+
 ## Verdicts, only these four
 
 - verified: the proof reproduced exactly, on the same target,

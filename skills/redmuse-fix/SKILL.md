@@ -45,7 +45,11 @@ Never rewrite the original proof or history. A retest that cannot run
   throwaway copy only). Record the un-widened baseline, the
   widened pre-fix rate, and the widened post-fix rate. Never
   ship the sleep, and never report a race fix as live-proved
-  from an un-widened sweep alone.
+  from an un-widened sweep alone. Ownership: you own this retest
+  after a patch; redmuse-auth names the exact await when the
+  finding is made, and redmuse-verify independently re-proves
+  the fix with the same recipe in redmuse-verify. Your retest
+  is not the independent re-proof.
 
 ## Verification that needs a server, and scratch ports
 

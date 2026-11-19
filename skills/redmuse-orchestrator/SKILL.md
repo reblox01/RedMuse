@@ -315,6 +315,13 @@ in the evidence, and use a lock-held or stalled-write repro
 for the yield question. That repro is a separate recipe, not
 covered here.
 
+Ownership. Three skills share this method, and each owns one
+part: redmuse-auth names the exact await when the finding is
+made, redmuse-fix owns retesting after a patch (see
+redmuse-fix), and redmuse-verify independently re-proves a fix
+with the recipe in redmuse-verify. This section holds the full
+recipe; the other two point here and do not restate it.
+
 ## Fix-task briefs: server need, patch-apply check, and scratch ports
 
 Every fix-task brief states three things, so workers do not guess:

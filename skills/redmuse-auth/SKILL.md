@@ -64,6 +64,12 @@ Every finding ships with a reproduced proof, or it is not a finding.
   was dead on SQLite; the contrast between the pre-fix run (for
   example orphans on 2 of 2 aborted trials) and the post-fix run
   (0 of 7) is what proves the yield fixed it. Record both runs.
+- Ownership: this section names the finding rule. The full
+  widened-window recipe lives in redmuse-orchestrator,
+  redmuse-fix owns retesting after a patch, and redmuse-verify
+  independently re-proves a fix with the recipe in redmuse-verify.
+  A finding from this section names the exact await so the other
+  two can run the recipe without guessing it.
 
 ## Password audit
 
@@ -150,6 +156,18 @@ Every finding ships with a reproduced proof, or it is not a finding.
   the same flaw is not reported twice under two names.
 - Tenant isolation: cross-tenant reads or writes in multi-tenant
   apps, using two test tenants.
+
+## Identity federation (thin coverage)
+
+Identity federation procedures in this skill are thin. There is
+no full section here for OAuth 2.0, OIDC, or SAML, and no
+federation probe is defined in this skill. A full section must
+cover: authorization-flow tests with test accounts, PKCE,
+redirect URI validation, token audience and issuer validation,
+SAML assertions, and federation trust boundaries. Until that
+section exists, do not improvise federation probes; record
+federation flows as untested, with the reason, and do not report
+them as clean.
 
 ## Output
 
