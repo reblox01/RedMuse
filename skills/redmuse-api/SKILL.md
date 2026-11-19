@@ -61,6 +61,17 @@ with a reproduced proof of concept request, or it is not a finding.
   docs: state the expected wait, the retryable status, and a
   backoff, so a caller can distinguish a busy-database retry from a
   real failure.
+- Rate-limit probe hygiene. The unique-IP-per-invocation principle
+  is not register-specific; it applies to any rate-limited API
+  endpoint. Rate-limit budgets are per-IP per-window, so probe IPs
+  must be unique per invocation, not just per process: a
+  per-process IP counter restarts every run and silently re-burns
+  the same bucket. Generate a fresh unique IP per probe invocation
+  (for example from the run id and trial number) and log the IP
+  used per trial, consistent with the hygiene note in redmuse-auth.
+  Do not burn the bucket and then misread the resulting 429s as a
+  target failure: a 429 after the budget is spent proves the limit
+  exists, not that the endpoint is broken.
 
 ## Output
 
