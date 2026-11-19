@@ -1,10 +1,25 @@
 # RedMuse lab tier
 
 Date: 6 November 2026
-Status: design only. No lab skill exists yet. This doc decides what the
-lab tier is, what belongs in it, and what never belongs in it, so the
-skills can be built one at a time without drifting into a different
-project.
+Status: shipped. 10 lab skills exist: redmuse-lab-traffic,
+redmuse-lab-network, redmuse-lab-container, redmuse-lab-privesc,
+redmuse-lab-reverse, redmuse-lab-cloud, redmuse-lab-mobile,
+redmuse-lab-forensics, redmuse-lab-malware, and
+redmuse-lab-detection. This doc decides what the lab tier is, what
+belongs in it, and what never belongs in it, so the skills can be
+used without drifting into a different project.
+
+Remaining limitations: the build-order section below still reads as
+a build plan, because it is the design record; the shipped skills
+are the ten named above. Section 10 below calls the detection skill
+"redmuse-lab-detect"; the shipped skill is "redmuse-lab-detection".
+The five tool guardrails are prose rules in this doc and in each
+skill, not machine-enforced policies: a skill that cannot list its
+allowed commands, flags, and timeouts concretely does not meet
+them, and that gap is still open. The lab-network entry below says
+"ARP spoofing"; the skill covers ARP-spoofing resistance
+assessment only, observing ARP behaviour without redirecting or
+intercepting traffic.
 
 ## What the lab tier is
 
@@ -163,12 +178,12 @@ finding.
 
 What it tests: a lab network at layer 2 and layer 3. Host
 discovery, port and service enumeration, and the classic local
-network weaknesses: name resolution poisoning, ARP spoofing,
-and services that answer without authentication. It maps the
-lab network the way recon maps a website, then tests the
-services it found, one at a time, with the same harmless-marker
-discipline as the core: prove the service answers, do not break
-it, do not take it over.
+network weaknesses: name resolution poisoning, ARP-spoofing
+resistance assessment, and services that answer without
+authentication. It maps the lab network the way recon maps a
+website, then tests the services it found, one at a time, with
+the same harmless-marker discipline as the core: prove the
+service answers, do not break it, do not take it over.
 
 What it needs: a lab network the user controls, with at least
 two VMs on it, and a Kali box or a scanner on the same network.
