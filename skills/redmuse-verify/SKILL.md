@@ -108,6 +108,12 @@ field named.
   (example: the 0 / -1 branches unreachable via HTTP).
   Claim only what was exercised; mark the rest unproven,
   not confirmed.
+- Severity calibration: when two reviewers rate the same
+  shape differently, the finding record carries both ratings
+  with reasons plus the shared rating (or the split), per
+  the report template. A severity reconciled by the
+  coordinator alone, with no reviewer reason on file, is
+  not calibrated; send it back.
 
 ## Method: re-run the proof, unchanged
 

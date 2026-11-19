@@ -80,6 +80,15 @@ method, parameter, CWE, proof, and fix:
   found. Example: FIRST turned out to be in neither list;
   asserting it was in one would have been a wrong
   assumption baked into the finding.
+- ratings by reviewer (multi-reviewer findings): each
+  reviewer's severity rating with the reason, recorded when
+  two reviewers rate the same shape differently.
+- shared rating (multi-reviewer findings): the one shared
+  rating the reviewers agreed, with the reason; or the
+  split, with each rating and reason shown plainly in the
+  report. A severity reconciled by the coordinator alone,
+  with no reviewer reason on file, is not a calibrated
+  rating.
 
 Worked shape, NEW-B3 style: function startsValue, missing
 words FIRST and NEXT, concrete shape FETCH FIRST ? ROWS ONLY,
