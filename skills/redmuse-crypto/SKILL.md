@@ -49,6 +49,22 @@ each one with the code or the configuration that shows it.
 - Never crack a real password to prove a point. The code
   that hashes it is the proof, and a test password you
   created is the only password you may test against.
+- Timing-oracle counting for password hashing: when auditing
+  scrypt-cost parity between two paths, count runs from the
+  SHARED entry point, not from the branch point. If both
+  paths pay a pre-INSERT hashPassword before they branch,
+  that shared run counts for both. Counting from the branch
+  made the fresh path look 2-vs-1 and invited a dummy scrypt
+  that overshot by a full run. Diff total scrypt runs per
+  path end to end, and validate any proposed equalizer by
+  interleaved live medians, not by the count alone.
+- Timing-oracle verdicts need a noise baseline. On a shared
+  VM, scrypt latency can vary 3x run to run, so a median gap
+  under about 100ms with a spread around 2500ms is not an
+  oracle. Record the spread (min, max, and interquartile
+  range) alongside the medians, run the two paths interleaved
+  rather than in separate blocks, and do not call a gap an
+  oracle unless it stands out against the measured spread.
 
 ## TLS and certificates
 

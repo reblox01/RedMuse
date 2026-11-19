@@ -29,6 +29,42 @@ Every finding ships with a reproduced proof, or it is not a finding.
   cookies. Info level alone, higher when combined with an XSS or a
   session flaw.
 
+## Abort and TOCTOU in async session code
+
+- Name the exact await, not the check-to-call gap. In async JS, a
+  check followed by adjacent synchronous statements has no window
+  for an abort to land in: no signal can be delivered between two
+  synchronous statements. The real window is during or after an
+  awaited operation, for example the awaited INSERT that creates
+  the session row. A TOCTOU finding must name that await and the
+  state that can change across it. A fix that only re-checks before
+  the call is not a fix; the fix must handle the post-await state,
+  for example deleting the row that was already committed when the
+  abort lands after the INSERT.
+- Abort probes must record the client outcome next to the DB count.
+  Counting session rows per user without distinguishing outcomes
+  conflates a legitimate session (client got a 201) with a true
+  orphan (client aborted). Log outcome-per-trial, aborted vs status
+  received, alongside the row count, so an orphan count means
+  aborted trials that still left a row.
+- An abort guard after a synchronous DB write is only as good as
+  the event-loop yields around it. On SQLite the INSERT is
+  synchronous, so a post-INSERT abort check with no intervening
+  yield can never observe a disconnect that lands mid-INSERT; the
+  check needs an explicit timer yield (or an async DB call) to see
+  it. Flag "abort guard after a sync DB write without an
+  intervening yield" as a review finding, and prove it with a
+  lock-held repro, not a sleep-based probe alone: hold the DB write
+  lock (or otherwise stall the sync write), abort during the stall,
+  then assert 0 orphan rows. A sleep-based probe alone cannot
+  distinguish "guard works" from "guard works only when something
+  yields".
+- Require a lock-held repro on the PRE-fix commit, not just the
+  fixed code. A diff-only review cannot show whether the old guard
+  was dead on SQLite; the contrast between the pre-fix run (for
+  example orphans on 2 of 2 aborted trials) and the post-fix run
+  (0 of 7) is what proves the yield fixed it. Record both runs.
+
 ## Password audit
 
 - Policy, against NIST 800-63B: minimum length 8, no forced
@@ -37,6 +73,28 @@ Every finding ships with a reproduced proof, or it is not a finding.
   breached and common passwords. A policy that requires a
   special character but allows `Password1!` is a finding
   about the policy, not about the user.
+- Strength-bar probes must use forms of 8 characters or more.
+  A 6- or 7-character probe is meaningless for the strength
+  bar because the length rule fires first and masks every
+  other rule; a "live" result from a short probe proves
+  nothing about the walk, pattern, or denylist rules. Always
+  use >=8-character forms, and re-check node-harness results
+  for length before concluding a probe passed or failed.
+- Walk matchers work on 6-character windows, so any walk
+  whose 6-windows are individually innocent is structurally
+  invisible to them. Probe 8-12 character walks whose every
+  6-window looks innocent, not just longer versions of known
+  6-window walks: bridges across keyboard rows, interleavings
+  of two short walks, and pair structures (for example
+  alternating hands or repeated pairs) that never form a
+  flagged 6-window.
+- Exact-match denylists need a repeated-form variant check.
+  Doubling bypassed both the common-password list and the
+  email-local equality check alike: a doubled form of a
+  denied value is not an exact match, so it passes. At review
+  time, ask of any exact-match denylist "what does the
+  doubled form do?" and probe the doubled, tripled, and
+  case-varied forms of each denied value.
 - Storage and hashing: bcrypt, scrypt, or Argon2 with a cost
   that is not the minimum, and a unique salt per password.
   MD5, SHA-1, or plain SHA-256 of a password with no salt,
@@ -54,6 +112,28 @@ Every finding ships with a reproduced proof, or it is not a finding.
   does not rate limit. Test with dummy accounts only, and
   record the attempt count that proved the limit, or its
   absence.
+- Live-probe setup for register and login rate limits: a
+  per-IP bucket (for example 5/hr per IP) blocks repeated
+  probes unless each attempt uses a distinct client IP. Where
+  the target honours X-Forwarded-For and no trusted proxy is
+  set, use a distinct X-Forwarded-For last entry per attempt
+  (local testing only); otherwise use distinct source IPs.
+  Do not burn the bucket and then misread the resulting 429s
+  as a target failure.
+- Probe hygiene: rate-limit budgets are per-IP per-window, so
+  probe IPs must be unique per invocation, not just per
+  process. A per-process IP counter restarts every run and
+  silently re-burns the same bucket, for example the 5/hr
+  register bucket. Generate a fresh unique IP per probe
+  invocation (for example from the run id and trial number)
+  and log the IP used per trial.
+- E2E users: seed them with a generated strong password from
+  the first attempt. The strength bar rejects common
+  passwords, and each rejected attempt burns budget in the
+  register rate limit (in-memory, reset by server restart).
+  Between debug runs, restart the server to reset the
+  rate-limit buckets instead of retrying against a burned
+  bucket.
 
 ## Privilege boundaries
 

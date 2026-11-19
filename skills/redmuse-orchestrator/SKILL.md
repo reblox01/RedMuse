@@ -174,6 +174,23 @@ why. If it reproduces only with a destructive payload, drop it
 and note the refusal. Severity follows reachability and impact, not
 scanner noise.
 
+## Severity calibration across reviewers
+
+When two reviewers rate the same finding shape differently (for
+example RedMuse Low and another reviewer Medium for the same
+shape in round 9), do not let the coordinator silently pick one
+rating. Ask the reviewers for one shared rating, with the
+reason, before the report is written. If they cannot agree on
+one rating, record both ratings in the finding record, with
+each reviewer's reason, and let the report show the split
+plainly instead of hiding it. The finding record gains two
+fields for this case: ratings by reviewer, and shared rating
+(or split, with reasons). A severity that was reconciled by
+the coordinator alone, with no reviewer reason on file, is
+not a calibrated rating. This applies to review rounds and
+to any ensemble run where two skills or reviewers score the
+same shape.
+
 ## Budgets and stopping
 
 Track probes, time, and teams against the gate numbers. When any budget
@@ -210,3 +227,93 @@ probe output is kept only for confirmed findings.
 After fixes, re-run only the proofs for fixed findings and record the
 outcome per finding: fixed, still open, or changed. Never re-run a whole
 deep scan to check one fix.
+
+## Live-proving race and TOCTOU fixes: widened-window recipe
+
+Use this as the standard way to live-prove a race or TOCTOU fix.
+A millisecond-wide race cannot be hit reliably from a localhost
+client: an un-widened sweep missed it 0/12 pre-fix in round 10.
+Do not report a race fix as live-proved from an un-widened sweep
+alone.
+
+1. Record the un-widened baseline first. Run the abort sweep
+   against the pre-fix code with no added delay, and record the
+   hit rate (for example 0/12 orphans). This shows the window is
+   too narrow to hit, not that the bug is absent.
+2. Make a throwaway copy of the target only. Never insert the
+   widening sleep in the real repo, the shipped code, or a shared
+   test target.
+3. In the throwaway copy only, insert a TEST-ONLY sleep after the
+   commit point, before the abort check or cleanup. Mark it
+   clearly, for example `// TEST-ONLY widened window, throwaway
+   copy only`, with a sleep of 300 to 500 ms. The sleep sits
+   after the row is committed and before the code that should
+   clean it up on abort, so an abort that lands during the sleep
+   exercises the cleanup path.
+4. Run the widened sweep pre-fix. Abort each trial during the
+   sleep window (for example abort at 50 ms into a 500 ms
+   window). Record orphans per trial and the client outcome per
+   trial (aborted vs status received). Pre-fix, the widened
+   sweep should catch the race deterministically (round 10:
+   2/3 orphans).
+5. Apply the fix in the throwaway copy, keep the same sleep,
+   and run the same widened sweep. Post-fix, expect 0 orphans,
+   with a cleanup log line per aborted trial that names the
+   deleted row.
+6. Remove the sleep and verify no TEST-ONLY code remains (grep
+   the throwaway copy for TEST-ONLY and for the sleep). Then
+   re-run the original proof once, un-widened, to confirm the
+   shipped shape still behaves.
+7. Record all three numbers in the evidence: un-widened
+   pre-fix rate, widened pre-fix rate, widened post-fix rate,
+   plus the cleanup logs.
+
+Limit: the sleep itself supplies an event-loop yield, so a
+widened sweep alone cannot prove a guard that must observe an
+abort during a synchronous write with no yield. If the fix
+relies on observing an abort during a synchronous database
+write, the widened sweep proves the cleanup path only. Say so
+in the evidence, and use a lock-held or stalled-write repro
+for the yield question. That repro is a separate recipe, not
+covered here.
+
+## Fix-task briefs: server need, patch-apply check, and scratch ports
+
+Every fix-task brief states three things, so workers do not guess:
+
+- Which verification needs a server. Name each check that
+  needs a running server, and name the checks that do not (for
+  example scanner or unit tests run with `node` directly).
+  Workers do not start a server by default. If the brief
+  names no server-needed check, no server is started.
+- Scratch port. The brief assigns each group one distinct
+  scratch port (see below). Workers use only their assigned
+  port.
+- Patch-apply check. Before handing a patch to the
+  coordinator, the worker applies it to a fresh copy of the
+  pristine checkout and shows it applies cleanly. The check
+  is: copy the pristine tree, apply the patch with
+  `git apply --check` then `git apply` (or
+  `patch -p1 --dry-run` then `patch -p1`), and record the
+  output. When the patch was generated from absolute paths,
+  as in this round's `diff -ruN` command, add `-p4` to the
+  `git apply` calls (or `-p4` to `patch`). A patch that does not apply cleanly is not handed
+  over. Keep this check even when it catches nothing; it is
+  cheap, and it is the step that proves the patch is complete.
+
+## Scratch ports when groups share one VM
+
+When several review or fix groups share one VM, port
+allocation collides (round 11: a first server failed with
+EADDRINUSE on 5303). Coordinate scratch ports per group in
+the brief, before any work starts. The coordinator assigns
+each group one distinct port or port range, records the
+assignment in the brief and the run log, and no group picks
+its own port. Before starting a server, the group checks its
+assigned port is free (for example
+`ss -ltnp | grep <port>`), and if it is in use, stops and
+asks the coordinator for a new port. Never kill another
+group's server, and never reuse another group's port because
+it looks idle. Example assignment for three groups: group A
+5311, group B 5312, group C 5313. The exact numbers do not
+matter; distinct and recorded is what matters.

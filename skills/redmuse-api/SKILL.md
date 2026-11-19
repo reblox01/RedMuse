@@ -43,6 +43,25 @@ with a reproduced proof of concept request, or it is not a finding.
 - Log every attempt: full request, full response, and result. The
   orchestrator reproduces from your log.
 
+## Probe shapes
+
+- Silent non-standard statuses. Grep repo-wide for non-standard
+  status returns (499, 444, 440) and confirm each one has a log line
+  or is intentionally silent. Example probe: `grep -rn "499\|444\|440"`
+  plus a check of nearby logging (`console`, logger calls) for each
+  hit. A status that returns silently, with no log line, is a
+  finding; an intentionally silent one must be recorded as such, not
+  left unexamined.
+- Busy-database 503 is a timeout to a short-timeout client. When an
+  API returns 503 after a long database busy wait (for example a 5s
+  `busy_timeout` producing a hang of about 5.042s before the 503),
+  record that a client with a shorter timeout sees this as a
+  timeout, not a 503. Do not report the 503 alone as the client
+  experience. The retry guidance for this path belongs in the API
+  docs: state the expected wait, the retryable status, and a
+  backoff, so a caller can distinguish a busy-database retry from a
+  real failure.
+
 ## Output
 
 Return one finding record per confirmed class, in the orchestrator shape:

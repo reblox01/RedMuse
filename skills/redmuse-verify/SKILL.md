@@ -44,6 +44,77 @@ If any of those four is missing, the finding is not verifiable
 yet. Send it back as candidate, with the missing piece named,
 instead of guessing.
 
+## Finding quality: send it back instead of guessing
+
+A finding record that fails any check below goes back as
+candidate, with the exact gap named. Do not fill the gap by
+guessing, and do not hunt a path the record does not show.
+A finding that fails the report template (missing real shape,
+sibling list, consumer table, or caller recovery, see
+redmuse-report) goes back the same way, with the missing
+field named.
+
+- Mechanism, not symptom. The title and proof must name the
+  mechanism that fails, not only the visible symptom.
+  Example: name the 2-row jump inside a column run that
+  columnRowsMonotonic rejects, not only the home-row
+  oscillation it produces. A mechanism points at the fix
+  location; a symptom does not.
+- Discriminator on false positives. A finding about a false
+  positive must name the discriminator, the rule that
+  separates the must-pass case from the must-stay-rejected
+  cases. List both sets next to each other, or state the
+  intended rule in one line (example: coverage, not
+  adjacency). A finding that only names the must-pass case
+  can be "fixed" with a narrower condition that silently
+  reopens the must-stay-rejected cases (example: 1b1b1b /
+  ababab).
+- Mechanism first, fix second. Before treating a finding as
+  a defect, confirm the flagging path exists in code. If the
+  code has no check that could flag the input (example: no
+  whole-password repetition check at all), the finding is a
+  question, not a defect. Send it back as candidate with the
+  question stated, and do not hunt for a non-existent
+  flagging path.
+- Cite the exact identifier. Cite identifiers exactly as
+  written in code, with file path, line number, and the
+  literal string where one matters (example: route.ts:42 /
+  :45 and the exact 409 strings). Never cite a
+  reconstructed ID: if the code documents a tag as R4-04,
+  cite R4-04, not N-R4-04, which exists nowhere in the
+  repo. A citation whose grep comes back empty costs a
+  re-search and risks updating the wrong doc.
+- "No fix needed" must enumerate every check path. A claim
+  that no fix is needed is only verifiable if it lists
+  every check path the input flows through and shows each
+  one was re-examined. A claim argued from one path only
+  (example: the walk checks) while another path (example:
+  the common-password exact-match path) was never
+  re-examined for the same input shape is not verified.
+  Send it back as candidate with the unexamined paths
+  named.
+- Test-file header claims vs production code. Cross-check
+  any header claim in a test file against the production
+  code it describes. A stale claim (example: "no sleep in
+  production" surviving the commit that added a production
+  sleep) is a note in your verification record, and the
+  finding or report must not repeat the stale claim as
+  fact.
+- Log-branch claims: list what was exercised. A claim
+  about a log branch (example: "success log only on
+  confirmed delete") is only as strong as the branches the
+  probe could reach. List which branches were actually
+  exercised and which were unreachable via the probe route
+  (example: the 0 / -1 branches unreachable via HTTP).
+  Claim only what was exercised; mark the rest unproven,
+  not confirmed.
+- Severity calibration: when two reviewers rate the same
+  shape differently, the finding record carries both ratings
+  with reasons plus the shared rating (or the split), per
+  the report template. A severity reconciled by the
+  coordinator alone, with no reviewer reason on file, is
+  not calibrated; send it back.
+
 ## Method: re-run the proof, unchanged
 
 1. Rebuild the proof request exactly as written, same endpoint,

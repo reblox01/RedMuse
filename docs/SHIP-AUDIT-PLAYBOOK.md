@@ -43,6 +43,9 @@ form submissions, or bookings.
   or use the local copy in `~/workspace/redmuse`.
 - Record the run in `redmuse-runs/<site>-<date>/run-log.md`:
   target, scope, mode, budgets, authorization.
+- If several groups share one VM, the brief assigns each group
+  one distinct scratch port, recorded in the run log. No group
+  picks its own port.
 
 ## 2. Phase 1: Recon, passive first
 
@@ -145,11 +148,21 @@ Report order:
 
 Severity by reachability first, then impact. Merge
 findings that share a root cause. Never inflate the
-count with the same bug on ten pages.
+count with the same bug on ten pages. If two reviewers
+rated the same shape differently, record both ratings
+with their reasons, or one shared rating with its reason,
+and show the split in the report instead of silently
+picking one.
 
 ## 8. Phase 7: Fix and retest, then ship
 
 - Fix one finding at a time, with `redmuse-fix`.
+- Each fix task states which retest needs a server; no server
+  is started by default. Use only the scratch port assigned
+  to your group.
+- Before handing a patch to the coordinator, apply it to a
+  fresh copy of the pristine checkout and show it applies
+  cleanly.
 - Retest only the original proof for each fixed finding.
   Record fixed, still open, or changed. Never rewrite
   history.
