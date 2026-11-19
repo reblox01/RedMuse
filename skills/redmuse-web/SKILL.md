@@ -104,14 +104,17 @@ concept, or it is not a finding.
   intentionally silent one must be recorded as such, not left
   unexamined.
 - CSP checks classify responses by content-type. Do not flag every
-  response without CSP the same way. Documents
-  (`text/html` and other document types) require the full nonce CSP.
-  On non-documents (images, favicon, fonts, other static assets)
-  require at least `frame-ancestors` (or `X-Frame-Options`) plus
-  `nosniff`, and report a missing CSP there as low severity header
-  hygiene, not as a missing-policy finding. A blanket "every response
-  must carry CSP" check overstates urgency on images; a "documents
-  only" check misses real gaps such as the favicon.
+  response without CSP the same way. Documents (`text/html` and
+  other document types) require an appropriate CSP: a nonce-based
+  policy, a hash-based policy, or a policy with no inline scripts
+  can each be appropriate, so do not require a nonce where none is
+  needed. For non-document responses (images, favicon, fonts, other
+  static assets), evaluate nosniff, CORP, and other relevant
+  resource protections separately, and do NOT require
+  `frame-ancestors` (or `X-Frame-Options`) on them: framing
+  protections are document protections, not general requirements
+  for images and fonts. Report a missing CSP on a non-document as
+  low severity header hygiene, not as a missing-policy finding.
 - PRG and redirect probes submit the real form first. Drive the real
   form submit in a browser and assert the landing URL; that is the
   default probe. A raw POST with a hand-picked content-type can miss
