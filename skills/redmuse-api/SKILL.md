@@ -133,13 +133,18 @@ endpoint found as untested coverage, not as clean.
   the same way you probed the first one, and record the checked list
   in the finding. A finding that names one endpoint while a sibling
   shares the helper is incomplete.
-- Silent non-standard statuses. Grep repo-wide for non-standard
+- Silent non-standard statuses. This probe is conditional on what
+  access the run has. When source is in scope, the grep version of
+  this check lives in redmuse-code: grep repo-wide for non-standard
   status returns (499, 444, 440) and confirm each one has a log line
-  or is intentionally silent. Example probe: `grep -rn "499\|444\|440"`
-  plus a check of nearby logging (`console`, logger calls) for each
-  hit. A status that returns silently, with no log line, is a
-  finding; an intentionally silent one must be recorded as such, not
-  left unexamined.
+  or is intentionally silent. When black-box only, do not grep: probe
+  by sending requests and observing responses. Send requests that
+  trigger error paths (bad ids, bad auth, oversized bodies) and
+  record the status returned, whether the body is empty, and whether
+  any log line appears in the logs available to the run. A status
+  that returns silently, with no log line, is a finding; an
+  intentionally silent one must be recorded as such, not left
+  unexamined.
 - Busy-database 503 is a timeout to a short-timeout client. When an
   API returns 503 after a long database busy wait (for example a 5s
   `busy_timeout` producing a hang of about 5.042s before the 503),

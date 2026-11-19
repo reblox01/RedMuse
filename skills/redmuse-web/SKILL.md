@@ -91,13 +91,18 @@ concept, or it is not a finding.
   probe each sibling route, and record the checked list in the
   finding. A finding that names one route while a sibling shares the
   helper is incomplete.
-- Silent non-standard statuses. Grep repo-wide for non-standard
+- Silent non-standard statuses. This probe is conditional on what
+  access the run has. When source is in scope, the grep version of
+  this check lives in redmuse-code: grep repo-wide for non-standard
   status returns (499, 444, 440) and confirm each one has a log line
-  or is intentionally silent. Example probe: `grep -rn "499\|444\|440"`
-  plus a check of nearby logging (`console`, logger calls) for each
-  hit. A status that returns silently, with no log line, is a
-  finding; an intentionally silent one must be recorded as such, not
-  left unexamined.
+  or is intentionally silent. When black-box only, do not grep: probe
+  by sending requests and observing responses. Send requests that
+  trigger error paths (bad ids, bad auth, oversized bodies) and
+  record the status returned, whether the body is empty, and whether
+  any log line appears in the logs available to the run. A status
+  that returns silently, with no log line, is a finding; an
+  intentionally silent one must be recorded as such, not left
+  unexamined.
 - CSP checks classify responses by content-type. Do not flag every
   response without CSP the same way. Documents
   (`text/html` and other document types) require the full nonce CSP.
