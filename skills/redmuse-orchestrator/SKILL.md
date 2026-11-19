@@ -64,6 +64,26 @@ staging. A declined or unavailable MCP is recorded as not run,
 never as clean, and a run with zero MCPs continues on the built-in
 skills alone.
 
+## Phase 0.75: threat model
+
+After MCP setup, before recon, run redmuse-threat-model. It models
+the system first, so the scan tests what the system actually
+trusts: data flow, trust boundaries, assets, actors, STRIDE threats
+with DREAD ranks, attack trees for the top threats, and a scan plan.
+The other teams work from that scan plan. Its outputs are scan plan
+artifacts, not finding records, so they never go through
+redmuse-verify. A model threat with no proof is a plan item, not a
+finding.
+
+## Phase 1: recon
+
+After the threat model, before CVE intel, run redmuse-recon. It
+builds the attack surface inventory: endpoints, parameters,
+technologies, and assets, plus the fingerprint list CVE intel
+needs. Recon returns inventory, not findings: a strange header or
+an open endpoint is inventory until an exploit team proves it, and
+recon records never go through redmuse-verify as findings.
+
 ## Phase 1.5: CVE intel
 
 After recon, before any exploit team starts, run redmuse-cve-intel.
