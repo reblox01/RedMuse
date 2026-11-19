@@ -89,7 +89,8 @@ jobs:
           tag = "${{ steps.version.outputs.new }}"
           out = f"redmuse-{tag}.zip"
           include = ["skills", "docs", "templates", "tools", "scripts",
-                     "examples", "README.md", "LICENSE", "CONTRIBUTING.md"]
+                     "examples", "test-target", "test-target-api",
+                     "README.md", "LICENSE", "CONTRIBUTING.md"]
           with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as zf:
               for item in include:
                   p = Path(item)
@@ -103,5 +104,5 @@ jobs:
           EOF
           gh release create "$new" \
             --title "RedMuse $new" \
-            --notes "Skill pack release. Install by asking Muse to install RedMuse $new from https://github.com/reblox01/RedMuse, or download the zip below and install it with scripts/install.sh. Test targets are not in the zip; they stay in the repo for demos only." \
+            --notes "Skill pack release. Install by asking Muse to install RedMuse $new from https://github.com/reblox01/RedMuse, or download the zip below and install it with scripts/install.sh. Test targets are in the zip; run the real test with python3 test-target/app.py 8901 then python3 tools/real_test.py, localhost only." \
             redmuse-*.zip
