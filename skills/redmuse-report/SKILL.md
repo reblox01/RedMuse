@@ -26,6 +26,67 @@ affected endpoints listed. Do not inflate the count with the same bug on
 ten endpoints. Keep a separate count of affected endpoints inside the
 merged finding.
 
+## The well-formed finding (NEW-B3 template)
+
+Every finding in the report follows this template. It is the
+NEW-B3 shape: exact function, exact missing words, a concrete
+shape, plus near-miss cases. That precision is why its fix was
+verifiable in one suite run. A finding that does not meet the
+template stays unvalidated until the missing piece is supplied;
+redmuse-verify sends it back under its finding-quality checks.
+
+Required fields, in addition to id, title, severity, endpoint,
+method, parameter, CWE, proof, and fix:
+
+- mechanism: the mechanism that fails, not only the symptom.
+  Name the check or function and the exact behaviour
+  (example: the 2-row jump inside a column run that
+  columnRowsMonotonic rejects).
+- discriminator (false positives only): the rule that
+  separates the must-pass case from the must-stay-rejected
+  cases. State both sets next to each other, or state the
+  intended rule in one line (example: coverage, not
+  adjacency).
+- citation: identifier exactly as written in code, plus file
+  path, line number, and the literal string where one
+  matters (example: route.ts:42 / :45 and the exact 409
+  strings). Never a reconstructed ID.
+- real shape (scanner findings): one example query per
+  keyword, naming the real SQL shape, not just the keyword.
+  Examples: ORDER BY ? NULLS FIRST, ORDER BY ? COLLATE "C",
+  FETCH FIRST ? ROWS ONLY.
+- siblings (fixed allow/blocklist findings): every sibling
+  keyword in the same clause family, enumerated and either
+  covered or explicitly scoped out with a reason. Examples
+  next to ROWS: RANGE / GROUPS, ROW; next to FIRST: NEXT;
+  plus ESCAPE / TO and INTERVAL units. A list finding that
+  does not ask "what are the siblings of this list?" is
+  incomplete.
+- consumers (shared-helper findings): a full consumer table,
+  every consumer of the shared helper's return value, not
+  just the files the reporter happened to open. Each row:
+  consumer, file and line, how it uses the return value,
+  and what happens on each branch.
+- caller recovery (false-failure findings): the caller's
+  next step and whether recovery is possible, not just that
+  the status code is wrong. Example: a rotate false 409
+  means the new key was issued but never delivered, the old
+  key is dead, and retry is impossible, so the outcome is
+  key loss.
+- check-whether phrasing (list findings): when a finding
+  adds X to a list, phrase it as a check, not an assertion
+  of state: "check whether X is already in list A and
+  missing from list B", then record what was actually
+  found. Example: FIRST turned out to be in neither list;
+  asserting it was in one would have been a wrong
+  assumption baked into the finding.
+
+Worked shape, NEW-B3 style: function startsValue, missing
+words FIRST and NEXT, concrete shape FETCH FIRST ? ROWS ONLY,
+near-miss cases listed, siblings ROW / RANGE / GROUPS
+enumerated, and one real shape per keyword. Copy that shape;
+do not copy its words.
+
 ## Report files
 
 Write all of these under redmuse-runs/<run-name>/:
@@ -51,6 +112,10 @@ Every report states: target, scope, mode, budgets used, phases run,
 classes probed, classes not probed and why, and whether the run was
 complete or partial. A partial run is never called clean. A clean report
 means no finding in the probed surface, and says exactly that.
+When a finding claims a log branch, the coverage statement lists
+which branches were actually exercised and which were unreachable
+via the probed route (example: the 0 / -1 branches unreachable
+via HTTP); only the exercised branches count as proven.
 
 ## Retest
 
