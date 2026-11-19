@@ -48,3 +48,8 @@ Return an attack surface inventory in this shape:
 Mark anything you could not reach, and anything that needs credentials
 the run does not have. The exploit teams plan from this inventory, so
 missing a route here means missing it everywhere.
+
+This inventory is not a finding list. Recon emits no findings, and
+nothing in this output goes through redmuse-verify. A strange header
+is inventory, not a vulnerability: record it here, and let an
+exploit team prove it before anyone files it as a finding.

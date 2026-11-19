@@ -13,7 +13,10 @@ with introduced and fixed events, so applicability is computed here:
 a version at or above introduced and below fixed is applicable, a
 version at or above fixed is not applicable, a version below
 introduced is not applicable. Unfixed ranges (no fixed event) are
-applicable from introduced onward. Versions that are not plain
+applicable from introduced onward. A vulnerability can list several
+affected ranges, so applicability is aggregated across every range:
+applicable when any range covers the version, not-applicable only
+when no range covers it. Versions that are not plain
 numeric dot versions get applicability "needs-confirmation" instead
 of a computed answer.
 
@@ -86,6 +89,14 @@ def _opener():
 # CWE to exploit class, heuristic only. The agent confirms the class
 # from the vulnerability description before selecting a probe. This
 # map contains no vulnerability ids, only generic weakness classes.
+#
+# KEYWORD_CLASS below is a natural-language description map, not a
+# scanner: it matches phrases from a vulnerability summary or details
+# (for example "sql injection") to a suggested exploit class. It holds
+# no SQL keywords, no identifier allowlist, and no Postgres keyword
+# table, and no SQL scanner ships in this repo. Do not apply
+# SQL-scanner review instructions to this table; if a SQL scanner is
+# ever introduced, its review guidance lives with that scanner.
 CWE_CLASS = {
     "79": "xss",
     "87": "xss",
@@ -152,6 +163,75 @@ def suggest_class(summary, details, cwe_list):
     return "other"
 
 
+def _range_applicable(version, introduced, fixed):
+    """Applicability of one OSV range for a parsed version.
+
+    Returns "applicable", "not-applicable", or None when the range
+    carries no usable bound (no introduced and no fixed event, for
+    example a range over commit hashes the version parser cannot
+    read). A range with only a fixed event covers every version
+    below that fixed version; a range with only an introduced
+    event covers every version from it onward.
+    """
+    intro_v = parse_version(introduced) if introduced else None
+    fixed_v = parse_version(fixed) if fixed else None
+    if intro_v is not None and cmp_version(version, intro_v) < 0:
+        return "not-applicable"
+    if fixed_v is not None and cmp_version(version, fixed_v) >= 0:
+        return "not-applicable"
+    if fixed_v is not None or intro_v is not None:
+        return "applicable"
+    return None
+
+
+def osv_applicability(version_text, vuln, package=None):
+    """Aggregate OSV applicability across every affected range.
+
+    A version is applicable when any affected range covers it. A
+    later range that does not cover it must not overwrite an
+    earlier range that does, which is what happened when the loop
+    assigned applicability per range: with disjoint ranges, a
+    version inside the first range and outside the second was
+    reported not-applicable. Only ranges for the queried package
+    count: an OSV record lists affected entries for sibling
+    packages too (for example lodash-es next to lodash), and a
+    sibling range must not decide applicability for this package.
+    Ranges with no package name are kept, so nothing is dropped
+    that cannot be attributed. Returns (applicability,
+    fixed_version). Applicability is "applicable",
+    "not-applicable", or "needs-confirmation" when no range
+    decides it or the version is not a plain numeric dot version.
+    fixed_version is the first fixed version seen, or None.
+    """
+    version = parse_version(version_text)
+    applicable = None
+    fixed_version = None
+    for affected in vuln.get("affected", []) or []:
+        entry_name = (affected.get("package") or {}).get("name")
+        if package is not None and entry_name and entry_name != package:
+            continue
+        for rng in affected.get("ranges", []) or []:
+            introduced = None
+            fixed = None
+            for event in rng.get("events", []) or []:
+                if introduced is None and "introduced" in event:
+                    introduced = event["introduced"]
+                if fixed is None and "fixed" in event:
+                    fixed = event["fixed"]
+            if fixed and fixed_version is None:
+                fixed_version = fixed
+            if version is None:
+                continue
+            result = _range_applicable(version, introduced, fixed)
+            if result == "applicable":
+                applicable = "applicable"
+            elif result == "not-applicable" and applicable is None:
+                applicable = "not-applicable"
+    if version is None or applicable is None:
+        return "needs-confirmation", fixed_version
+    return applicable, fixed_version
+
+
 def osv_query(item):
     """Query OSV for one package item. Returns (results, error)."""
     body = json.dumps(
@@ -175,7 +255,6 @@ def osv_query(item):
     except Exception as exc:  # network down, timeout, bad JSON
         return [], "osv error for %s %s: %s" % (
             item["ecosystem"], item["package"], exc)
-    version = parse_version(item["version"])
     results = []
     for vuln in data.get("vulns", []):
         vid = vuln.get("id", "")
@@ -193,34 +272,8 @@ def osv_query(item):
         db_specific = vuln.get("database_specific", {}) or {}
         for cwe in db_specific.get("cwe", []) or []:
             cwe_list.append(str(cwe))
-        fixed_version = None
-        applicable = None
-        for affected in vuln.get("affected", []):
-            for rng in affected.get("ranges", []):
-                introduced = None
-                fixed = None
-                for event in rng.get("events", []):
-                    if "introduced" in event:
-                        introduced = event["introduced"]
-                    if "fixed" in event:
-                        fixed = event["fixed"]
-                if fixed:
-                    fixed_version = fixed
-                if version is None:
-                    applicable = "needs-confirmation"
-                    continue
-                intro_v = parse_version(introduced) if introduced else None
-                fixed_v = parse_version(fixed) if fixed else None
-                if intro_v is not None and cmp_version(version, intro_v) < 0:
-                    applicable = "not-applicable"
-                elif fixed_v is not None and cmp_version(version, fixed_v) >= 0:
-                    applicable = "not-applicable"
-                elif fixed_v is not None:
-                    applicable = "applicable"
-                elif intro_v is not None:
-                    applicable = "applicable"
-        if applicable is None:
-            applicable = "needs-confirmation"
+        applicable, fixed_version = osv_applicability(
+            item["version"], vuln, package=item["package"])
         results.append(
             {
                 "input": item,
