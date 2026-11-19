@@ -62,6 +62,64 @@ with a reproduced proof of concept request, or it is not a finding.
 - Log every attempt: full request, full response, and result. The
   orchestrator reproduces from your log.
 
+## GraphQL
+
+If the target exposes a GraphQL endpoint (usually /graphql), test
+these classes. Each class needs probe steps, expected vs observed
+behavior, and evidence. A GraphQL endpoint with no dedicated probes
+is untested, not clean.
+
+- Introspection abuse. Probe: POST `{"query": "{ __schema { types
+  { name } } }"}` to the endpoint, then request field lists for the
+  types returned. Expected: introspection disabled in production, or
+  the schema restricted to what the client needs. Observed: record
+  the exact response. Proof is a returned schema that exposes types,
+  fields, or mutations the client never uses. An introspection query
+  that returns an error is clean for this class.
+- Query depth and complexity resource consumption. Probe: send a
+  shallow query first and record response time and size, then the
+  same shape nested one level deeper at a time (for example user,
+  then user friends, then friends of friends), still with small
+  result sets. Expected: the server rejects or caps queries past a
+  stated depth or complexity limit. Observed: record time, size, and
+  status per depth. Proof is response time or size growing sharply
+  with depth and no cap firing. Never send a real flood; a small
+  depth ladder proves the missing cap.
+- Batching attacks. Probe: send one request carrying an array of
+  several queries (for example several login or password-reset
+  mutations in a single batch) and count how many executed. Expected:
+  batching disabled, or a small batch limit, or per-query rate
+  limits that still apply inside a batch. Observed: record how many
+  of the batched operations ran and their results. Proof is a batch
+  that executes operations past the single-request rate limit, for
+  example many login attempts in one HTTP request with no 429.
+- Authorization bypass via field aliases. Probe: with a low-privilege
+  token, request the same field twice under different aliases with
+  different arguments in one query, for example `a: user(id: "1")
+  { name }` and `b: user(id: "2") { name }`, where id 2 belongs to
+  another user. Expected: the authorization check applies per field
+  resolution, so the other user's object is denied. Observed: record
+  which alias returned data and which was denied. Proof is the
+  other user's data returned under the aliased field while the
+  direct request for the same object is denied or would be denied.
+- Evidence for every GraphQL finding: the exact query sent, the full
+  response, the token privilege used, and the expected vs observed
+  behavior above. A query that returns data is not proof on its own;
+  the comparison against the expected behavior is what makes it a
+  finding.
+
+## gRPC
+
+gRPC methodology in this skill is thin: there is no probe section for
+it yet, and this paragraph does not invent one. A full gRPC section
+must cover, at minimum: service enumeration (which services and
+methods are exposed, including server reflection when enabled),
+method authorization (each method called with a low-privilege
+credential, not just the ones the client calls), and message
+validation (malformed, oversized, or unexpected fields and how the
+server handles them). Until that section exists, record any gRPC
+endpoint found as untested coverage, not as clean.
+
 ## Probe shapes
 
 - Silent non-standard statuses. Grep repo-wide for non-standard
