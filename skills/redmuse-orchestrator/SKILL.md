@@ -36,6 +36,18 @@ overridden by the user, the target owner, or a scope note:
   industrial control
 - payment bypass for personal gain
 - CSAM and bioweapon content, in any form
+- phishing and social engineering infrastructure, including
+  credential capture pages, pretexting campaigns, and vishing
+- command and control servers, including C2 frameworks, beacons,
+  and listeners waiting for a compromised machine to call home
+- payload generation for real shells, including reverse-shell
+  one-liners, shellcode, and msfvenom payloads
+- VPN and detection evasion, including rotating VPN endpoints
+  to dodge a rate limit, and AV or EDR evasion
+
+This is the canonical refusal list. docs/LAB-TIER.md carries the
+same prohibitions for the lab tier; no skill may run with a
+weaker list than this one.
 
 If a request touches anything on this list, refuse it, say which
 item it touches, and offer the closest allowed alternative. The
@@ -148,21 +160,47 @@ recorded as skipped for that surface, never as a clean result.
 
 ## Finding record
 
-Every candidate finding comes back in this shape, no exceptions:
+Every candidate finding comes back in this shape, no exceptions.
+It is the one canonical finding schema: redmuse-verify and
+redmuse-report consume this same shape, so a record built here
+must already carry every field they need.
 
 - id: short slug, for example idor-user-profile.
 - title, severity guess, endpoint, method, parameter.
-- proof: the exact request and response that reproduce it, with a
-  harmless marker.
+- proof: the exact request and the exact response that reproduce
+  it, with a harmless marker. The request and the response are
+  recorded separately, never merged into one paraphrase.
+- expected behavior: what a secure target would return for the
+  exact request in proof.
+- observed behavior: what the target actually returned when the
+  finder ran the exact request. Expected and observed sit side
+  by side, so the gap is visible without re-reading the proof.
+- authorization context: the account, role, token scope, or
+  unauthenticated state the proof ran under, plus the scope
+  that authorized it.
 - cve: vulnerability id when the finding came from a CVE intel
   record, else blank.
 - fixed version: the patched version from the CVE record, else blank.
 - exploit selected: the safe check run for the CVE record, else blank.
 - impact: what an attacker actually gains, in one paragraph.
 - fix: the root cause fix, not a symptom patch.
+- verification status: unvalidated until redmuse-verify returns
+  a verdict, then verified, candidate, rejected, or blocked.
+- proof capsule: attached by redmuse-verify with its verdict,
+  not by the finder. It holds the replayable request, the
+  response excerpt, and the one replay command.
+- NEW-B3 fields (conditional by finding type, see redmuse-report
+  for the type-conditional detail): mechanism, discriminator,
+  citation, real shape, siblings, consumers, caller recovery,
+  ratings by reviewer, shared rating. Apply only the fields
+  that match the finding type. A field that does not match the
+  type stays blank, it is not invented.
 
 A record without a reproducible proof is unvalidated. Unvalidated records
-go in the report as unvalidated, never as confirmed.
+go in the report as unvalidated, never as confirmed. A record missing
+expected behavior, observed behavior, authorization context, or any
+NEW-B3 field that matches its type goes back as candidate under
+redmuse-verify, with the missing piece named.
 
 ## Validation
 

@@ -18,11 +18,13 @@ role, with its own verdicts.
 ## Separation
 
 - You are not the finder. You receive only the finding record:
-  id, title, endpoint, method, parameter, the exact proof request,
-  the expected result, and the harmless marker used. You do not
-  receive the finder's reasoning, its confidence, or its severity
-  argument. If you are handed a narrative instead of a record,
-  ask for the record.
+  id, title, endpoint, method, parameter, the exact proof
+  request and the exact response, the expected behavior, the
+  observed behavior, the authorization context, and the
+  harmless marker used. You do not receive the finder's
+  reasoning, its confidence, or its severity argument. If you
+  are handed a narrative instead of a record, ask for the
+  record.
 - You are not the fixer. You never patch code, change config, or
   rotate a secret. If the finding is real, you hand it back
   verified, and redmuse-fix decides what to do with it.
@@ -32,17 +34,38 @@ role, with its own verdicts.
 
 ## Input: the finding record
 
-Every finding you verify arrives in this shape:
+Every finding you verify arrives in this shape, the one
+canonical finding schema shared with the orchestrator and
+redmuse-report. The orchestrator asks the finder for every
+field below, so a record that reaches you with one missing
+is incomplete, not a field you must guess:
 
 - id, title, endpoint, method, parameter.
 - proof: the exact request that reproduces it, with the harmless
-  marker, and the exact response that proved it.
-- expected: what a secure target would return for that request.
-- actual: what the target returned when the finder ran it.
+  marker, and the exact response that proved it, recorded
+  separately, never merged into one paraphrase.
+- expected behavior: what a secure target would return for that
+  request.
+- observed behavior: what the target actually returned when the
+  finder ran it. Expected and observed sit side by side, so the
+  gap is visible without re-reading the proof.
+- authorization context: the account, role, token scope, or
+  unauthenticated state the proof ran under, plus the scope
+  that authorized it.
+- verification status: unvalidated on arrival. Your verdict
+  sets it, and you attach the proof capsule with the verdict.
+- NEW-B3 fields that match the finding type (mechanism,
+  discriminator, citation, real shape, siblings, consumers,
+  caller recovery, ratings by reviewer, shared rating), per
+  redmuse-report. A field whose type does not match stays
+  blank; you never ask for it and never invent it.
 
-If any of those four is missing, the finding is not verifiable
+If any field above is missing, the finding is not verifiable
 yet. Send it back as candidate, with the missing piece named,
-instead of guessing.
+instead of guessing. The send-back rule covers only fields in
+this canonical schema: the orchestrator asks for all of them,
+so a missing field is a gap in the record, not a field the
+finder was never asked for.
 
 ## Finding quality: send it back instead of guessing
 
