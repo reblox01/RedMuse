@@ -55,7 +55,15 @@ concept, or it is not a finding.
 - One variable at a time. A probe that changes three things proves
   nothing.
 - Harmless markers only, for example a unique string like
-  musestrix-probe-123. If the marker comes back, the class is proven.
+  musestrix-probe-123. A marker coming back only shows reflection,
+  not execution: it may be HTML-encoded, placed in a non-executable
+  context, or returned as plain text. Before confirming XSS, record
+  the reflection context (element content, attribute value, script
+  block, or URL) and whether the marker is encoded, then confirm
+  with harmless browser-side execution evidence, for example a
+  payload that sets document.title to a unique marker and reading
+  the title back. Reflection without execution evidence is a
+  candidate, not a confirmed finding.
 - Test accounts only. Never touch real user data or real sessions.
 - Log every attempt: request, response, and result. The orchestrator
   reproduces from your log, so a missing request means a dropped finding.
