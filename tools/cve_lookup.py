@@ -184,7 +184,7 @@ def _range_applicable(version, introduced, fixed):
     return None
 
 
-def osv_applicability(version_text, vuln):
+def osv_applicability(version_text, vuln, package=None):
     """Aggregate OSV applicability across every affected range.
 
     A version is applicable when any affected range covers it. A
@@ -192,7 +192,12 @@ def osv_applicability(version_text, vuln):
     earlier range that does, which is what happened when the loop
     assigned applicability per range: with disjoint ranges, a
     version inside the first range and outside the second was
-    reported not-applicable. Returns (applicability,
+    reported not-applicable. Only ranges for the queried package
+    count: an OSV record lists affected entries for sibling
+    packages too (for example lodash-es next to lodash), and a
+    sibling range must not decide applicability for this package.
+    Ranges with no package name are kept, so nothing is dropped
+    that cannot be attributed. Returns (applicability,
     fixed_version). Applicability is "applicable",
     "not-applicable", or "needs-confirmation" when no range
     decides it or the version is not a plain numeric dot version.
@@ -202,6 +207,9 @@ def osv_applicability(version_text, vuln):
     applicable = None
     fixed_version = None
     for affected in vuln.get("affected", []) or []:
+        entry_name = (affected.get("package") or {}).get("name")
+        if package is not None and entry_name and entry_name != package:
+            continue
         for rng in affected.get("ranges", []) or []:
             introduced = None
             fixed = None
@@ -265,7 +273,7 @@ def osv_query(item):
         for cwe in db_specific.get("cwe", []) or []:
             cwe_list.append(str(cwe))
         applicable, fixed_version = osv_applicability(
-            item["version"], vuln)
+            item["version"], vuln, package=item["package"])
         results.append(
             {
                 "input": item,

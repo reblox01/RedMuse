@@ -31,6 +31,17 @@ def vuln(*range_events):
     }
 
 
+def named_vuln(*named_ranges):
+    """Build an OSV vuln record from (package name, events) pairs."""
+    return {
+        "affected": [
+            {"package": {"name": name},
+             "ranges": [{"events": events}]}
+            for name, events in named_ranges
+        ],
+    }
+
+
 class TestOsvApplicability(unittest.TestCase):
     def test_disjoint_ranges_version_in_first_only(self):
         # Fixed in 2.0, reintroduced in 3.0, fixed in 4.0. Version 1.5
@@ -112,6 +123,28 @@ class TestOsvApplicability(unittest.TestCase):
         )
         _, fixed = cve_lookup.osv_applicability("5.0", record)
         self.assertEqual(fixed, "2.0")
+
+    def test_sibling_package_ranges_do_not_decide(self):
+        # Shape of live GHSA-29mw-wpgm-hmr9: the lodash range is fixed
+        # at 4.17.21, while a sibling lodash.trim range has no fixed
+        # event. For lodash 4.17.21 the sibling range must not make
+        # the record applicable.
+        record = named_vuln(
+            ("lodash", [{"introduced": "4.0.0"}, {"fixed": "4.17.21"}]),
+            ("lodash.trim", [{"introduced": "4.0.0"}]),
+        )
+        applicable, _ = cve_lookup.osv_applicability(
+            "4.17.21", record, package="lodash")
+        self.assertEqual(applicable, "not-applicable")
+        applicable, _ = cve_lookup.osv_applicability(
+            "4.17.20", record, package="lodash")
+        self.assertEqual(applicable, "applicable")
+
+    def test_ranges_without_package_name_are_kept(self):
+        record = vuln([{"introduced": "1.0"}, {"fixed": "2.0"}])
+        applicable, _ = cve_lookup.osv_applicability(
+            "1.5", record, package="lodash")
+        self.assertEqual(applicable, "applicable")
 
 
 if __name__ == "__main__":
